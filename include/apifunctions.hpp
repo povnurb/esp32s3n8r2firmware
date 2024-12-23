@@ -2,6 +2,7 @@
 // declaraciones
 // void setupPinAlarma1();
 boolean deleteArchivoAlarmas();
+void enviarMensaje(String mensaje);
 
 String apiHistorialAlarmas() // FIXME: no se puede por que el archivo de origen agrega "," y ya no es un JSON
 {
@@ -1015,6 +1016,17 @@ bool apiPostControlDevice(const String &command) // cambiar el nombre de la func
         telegram = onOffTele;
         settingsSave(); // guardar la configuracion
         return true;
+    }
+    else if (output.startsWith("TELEMENSAJE"))
+    {
+        bool mensaje = jsonCommand["value"];
+
+        if (mensaje)
+        {
+            enviarMensaje("Bot " + sala + " en linea");
+            return true;
+        }
+        return false;
     }
     else if (output.startsWith("BOTTOKEN"))
     {
