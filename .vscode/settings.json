@@ -1,0 +1,10 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "string": "cpp",
+        "cmath": "cpp",
+        "*.tcc": "cpp",
+        "fstream": "cpp",
+        "typeinfo": "cpp"
+    }
+}
