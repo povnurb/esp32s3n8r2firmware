@@ -1471,3 +1471,74 @@ String getSendJson(String type, String msg)
     serializeJson(doc, response);
     return response;
 }
+
+//---------------------------------------------------------------
+// OLED
+//---------------------------------------------------------------
+
+void mostrar()
+{
+
+    if (!modoSta)
+    {
+        OLED.clearDisplay();
+        OLED.setTextSize(1);
+        OLED.setTextColor(WHITE);
+        OLED.setCursor(0, 0);
+        OLED.println(String(ap_ssid));
+        OLED.println(ipToStr(WiFi.softAPIP())); // ipStr(WiFi.softAPIP())
+        OLED.println(getDateTime());
+        if (tempC < 2)
+        {
+            OLED.print("WAIT");
+        }
+        else
+        {
+            OLED.print(tempC);
+        }
+        OLED.print(" C   ");
+        if (humedad < 2)
+        {
+            OLED.print("WAIT");
+        }
+        else
+        {
+            OLED.print(humedad);
+        }
+        OLED.println(" %");
+        OLED.display();
+        myLog("INFO", "functions.hpp", "mostrar", "MODO PUNTO DE ACCESO");
+        Serial.flush();
+    }
+    else
+    {
+        myLog("INFO", "functions.hpp", "mostrar", "MODO CLIENTE");
+        Serial.flush();
+        OLED.clearDisplay();
+        OLED.setTextSize(1);
+        OLED.setTextColor(WHITE);
+        OLED.setCursor(0, 0);
+        OLED.println(ipToStr(WiFi.localIP()));
+        // tal vez mostrar si hay alarma presente
+        OLED.println(getDateTime());
+        if (tempC < 2)
+        {
+            OLED.print("WAIT");
+        }
+        else
+        {
+            OLED.print(tempC);
+        }
+        OLED.print(" C   ");
+        if (humedad < 2)
+        {
+            OLED.print("WAIT");
+        }
+        else
+        {
+            OLED.print(humedad);
+        }
+        OLED.println(" %");
+        OLED.display();
+    }
+}

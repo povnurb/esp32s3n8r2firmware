@@ -7,7 +7,7 @@ AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");           // access at ws://[esp ip]/ws
 AsyncEventSource events("/events"); // event source (Server-Sent events) escucha loseventos
 
-bool security = false; // si esta en true pide usuario y contraseña
+bool security = true; // si esta en true pide usuario y contraseña
 
 // validar usuario y contraseña
 void validateUserAndPasswordResponse(AsyncWebServerRequest *request)
@@ -185,8 +185,11 @@ void initServer()
     server.onNotFound([](AsyncWebServerRequest *request)
                       {
                         validateUserAndPasswordResponse(request);//validacion user and password
-                        request->addInterestingHeader(HEADER_TEXT);
+                        /*request->addInterestingHeader(HEADER_TEXT);
                         AsyncWebServerResponse *response = request->beginResponse(200,dataTypeJson,"{\"msg\":\"Error 404\"}");
+                        request->send(response); */
+                        AsyncWebServerResponse *response = request->beginResponse_P(200,dataTypeHTML, index_html, index_html_length);
+                        response->addHeader("Content-Encoding",dataEncoding);
                         request->send(response); });
 
     // Servidor web
@@ -215,6 +218,7 @@ void initServer()
         {"/js/135.js", file_135_js, file_135_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/183.js", file_183_js, file_183_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/261.js", file_261_js, file_261_js_length, dataTypeJavaScripts, dataEncoding},
+        {"/js/333.js", file_333_js, file_333_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/360.js", file_360_js, file_360_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/414.js", file_414_js, file_414_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/436.js", file_436_js, file_436_js_length, dataTypeJavaScripts, dataEncoding},
@@ -225,7 +229,7 @@ void initServer()
         {"/js/649.js", file_649_js, file_649_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/671.js", file_671_js, file_671_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/724.js", file_724_js, file_724_js_length, dataTypeJavaScripts, dataEncoding},
-        {"/js/855.js", file_855_js, file_855_js_length, dataTypeJavaScripts, dataEncoding},
+        //{"/js/855.js", file_855_js, file_855_js_length, dataTypeJavaScripts, dataEncoding},
         {"/fonts/bootstrap-icons.woff", bootstrap_icons_woff, bootstrap_icons_woff_length, dataTypeWOFF, dataEncoding},
         {"/fonts/bootstrap-icons.woff2", bootstrap_icons_woff2, bootstrap_icons_woff2_length, dataTypeWOFF2, dataEncoding},
 

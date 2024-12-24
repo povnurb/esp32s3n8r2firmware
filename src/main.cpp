@@ -89,7 +89,7 @@ void setup()
   }
   // data alarmas
   myLog("INFO", "alarmas.hpp", "alarmaPresente()", "alarma presente verificando archivo de alarmas.json");
-
+  // comunicacion I2C https://randomnerdtutorials.com/esp32-i2c-communication-arduino-ide/
   Wire.begin(RELOJSDA, RELOJSCL); // para declara cualquier pin I2C SDA = DATOS, SCL = RELOJ
   relojSetup();                   // conectar el temposizador
   // definir los pines de entrada y salida
@@ -110,14 +110,14 @@ void setup()
     crearArchivoAlarmas();
     myLog("INFO", "main.hpp", "exiteArchivoAlarmas()", "archivo alarmas.json creado");
   }
-  if (!OLED.begin(SSD1306_SWITCHCAPVCC, 0x3C))
-  { // Dirección 0x3C
+  if (!OLED.begin(SSD1306_SWITCHCAPVCC, 0x3C)) // 0x3C alimentación a 3.3 volts
+  {                                            // Dirección 0x3C
     myLog("INFO", "main.cpp", "OLED.begin()", "OLED no encontrado");
     // while(true);
   }
   else
   {
-    myLog("INFO", "main.cpp", "OLED.begin()", "Verificar Display");
+    myLog("INFO", "main.cpp", "OLED.begin()", "OLED OK");
     OLED.clearDisplay();
   }
   // PWM
@@ -132,7 +132,9 @@ void setup()
   initWebSockets();
   // llamar a la actualización del proceso del firmware -enviar por ws y sacar por serial
   Update.onProgress(printFirmwareProgress);
-
+  // tarea que muestra en el LCD informacion
+  TaskHandle_t lcdTaskHandle;
+  xTaskCreatePinnedToCore(TaskLCD, "TaskLCD", 1024 * 4, NULL, 1, &lcdTaskHandle, 0); // tarea no ten importante min 4 megas
   // crear tarea para la reconexión del WIFI
   TaskHandle_t wifiTaskHandle;
   xTaskCreatePinnedToCore(TaskWifiReconnect, "TaskWifiReconnect", 1024 * 10, NULL, 1, &wifiTaskHandle, 1);

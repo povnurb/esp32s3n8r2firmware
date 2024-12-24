@@ -3,6 +3,7 @@ void contadorAlarmas();
 void activarAlarma();
 void resetIntLoop();
 void fechaRlay();
+void mostrar();
 
 // tarea de la reconexion del wifi
 void TaskWifiReconnect(void *pvParameters)
@@ -193,5 +194,15 @@ void TaskWsSend(void *pvParameters)
         vTaskDelay(1000 / portTICK_PERIOD_MS); // se ejecutara coda 1 seg
         // verifica si hay datos para enviar
         wsMessageSend();
+        }
+}
+void TaskLCD(void *pvParameters)
+{
+    (void)pvParameters;
+    while (1)
+    {
+        vTaskDelay(1000 / portTICK_PERIOD_MS); // se ejecutara coda 1 seg
+        // verifica si hay datos para enviar
+        mostrar();
         }
 }

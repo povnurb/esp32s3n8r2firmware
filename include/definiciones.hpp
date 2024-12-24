@@ -86,7 +86,7 @@ char device_name[30];     // nombre del dispositivo ejemplo: es el lugar HGO3PIS
 char device_user[16];     // usuario web
 char device_password[16]; // para logearse en el servidor web
 u_int16_t device_restart; // numero entero positivo que va hasta 65535
-
+boolean modoSta;
 //-------------------------------------------------------------------
 // Zona configuración WIFI en modo Cliente (Variables)
 //-------------------------------------------------------------------

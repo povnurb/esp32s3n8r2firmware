@@ -33,6 +33,7 @@ void startAP()
     dnsServer.start(DNSSERVER_PORT, "*", ap_IPv4);
     // IpMqtt = ipStr(WiFi.localIP()); //si no esta en WIFI
     wifi_app = WIFI_AP;
+    modoSta = false; // manda informacion del estado al OLED
 }
 
 // funcion del modo cliente o STA
@@ -46,6 +47,7 @@ void startSTA()
     WiFi.mode(WIFI_STA); // TODO: verificar si cambio todos lo WIFI_STA a WIFI_AP_STA en tareas.hpp y en wifi.hpp
     myLog("INFO", "wifi.hpp", "startSTA()", "Modo Estación (STA) ...");
     wifi_change = true;
+
     // verificar si el DHCP esta activado
     if (wifi_ip_static)
     { // si no viene el DHCP se utilizara la ip fija
@@ -85,6 +87,7 @@ void startSTA()
         blinkRandomNeoPixel(100, 1000, "amarillo"); // TODO: no hay parpadeo por que no hay un ciclo de repetición
         IpMqtt = ipToStr(WiFi.localIP());           // variable que se puede mandar por MQTT o WEBSOCKET
         wifi_app = WIFI_STA;
+        modoSta = true; // manda informacion del estado al OLED
     }
     else
     {
@@ -114,6 +117,7 @@ void wifiSetup()
     }
     else
     { // AP
+
         myLog("DEBUG", "wifi.hpp", "wifiSetup()", "wifi_mode esta en false");
         startAP();
         myLog("INFO", "wifi.hpp", "wifiSetup()", "WiFi en modo Punto de Acceso (AP)");
