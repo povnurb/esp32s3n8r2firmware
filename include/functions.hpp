@@ -1507,12 +1507,12 @@ void mostrar()
         }
         OLED.println(" %");
         OLED.display();
-        myLog("INFO", "functions.hpp", "mostrar", "MODO PUNTO DE ACCESO");
+        // myLog("INFO", "functions.hpp", "mostrar", "MODO PUNTO DE ACCESO");
         Serial.flush();
     }
     else
     {
-        myLog("INFO", "functions.hpp", "mostrar", "MODO CLIENTE");
+        // myLog("INFO", "functions.hpp", "mostrar", "MODO CLIENTE");
         Serial.flush();
         OLED.clearDisplay();
         OLED.setTextSize(1);

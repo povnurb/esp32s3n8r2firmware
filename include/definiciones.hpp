@@ -162,6 +162,7 @@ int maxTimeMin = 1440; // maximo tiempo que mide el potenciometro y comparte el 
 int tgrafica;          // tiempo en minutos que indica cada cuantos minutos toma una muestra y guardar en minutos
 int diesSeg = 6;
 int minutos = 60;
+String vTime[NUM_VALORES];     // Array para almacenar los valores de temperatura
 int vTemp[NUM_VALORES];        // Array para almacenar los valores de temperatura
 int vHum[NUM_VALORES];         // Array para almacenar los valores de humedad
 int vSensorPozo1[NUM_VALORES]; // Array para almacenar los valores de temperatura del pozo1
