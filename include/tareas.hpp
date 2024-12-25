@@ -167,7 +167,7 @@ void TaskTimeGrafica(void *pvParameters)
     while (1)
     {
         muestra();
-        vTaskDelay(60000 / portTICK_PERIOD_MS); // para que de 1 minuto
+        vTaskDelay(1000 / portTICK_PERIOD_MS); // para que de 1 minuto
     }
 }
 
@@ -194,7 +194,7 @@ void TaskWsSend(void *pvParameters)
         vTaskDelay(1000 / portTICK_PERIOD_MS); // se ejecutara coda 1 seg
         // verifica si hay datos para enviar
         wsMessageSend();
-        }
+    }
 }
 void TaskLCD(void *pvParameters)
 {
@@ -204,5 +204,5 @@ void TaskLCD(void *pvParameters)
         vTaskDelay(1000 / portTICK_PERIOD_MS); // se ejecutara coda 1 seg
         // verifica si hay datos para enviar
         mostrar();
-        }
+    }
 }

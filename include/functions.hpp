@@ -1,5 +1,7 @@
 // definir funciones
 bool dataGraficasSave();
+bool timeSave();
+void ejecutarTime();
 bool validateNestedKeys(JsonObject &obj, const char *keys[], size_t keysSize);
 // realizar un log en el puerto serial
 void myLog(const char *type, const char *arch, const char *func, const char *msg)
@@ -432,7 +434,7 @@ void timeSetup()
     */
 }
 
-String getDateTime() // antes getDateTime()
+String getDateTime()
 {
     if (rtcOk)
     {
@@ -463,6 +465,36 @@ String getDateTime() // antes getDateTime()
     return String(fecha);
 }
 // FIXME:
+String getDateHora()
+{
+    if (rtcOk)
+    {
+        tm = rtc.now();
+    }
+    char horario[6];
+    int dia;
+    int mes;
+    long anio;
+    int hora;
+    int minuto;
+    int segundo;
+
+    dia = tm.day();
+    // Serial.println(dia);
+    mes = tm.month();
+    // Serial.println(mes);
+    anio = tm.year(); // no se porque pero se tiene que restar solo tm.year da 72
+    // Serial.println(anio);
+    hora = tm.hour();
+    // Serial.println(hora);
+    minuto = tm.minute();
+    // Serial.println(minuto);
+    segundo = tm.second();
+
+    // sprintf( horario, "%.2d-%.2d-%.4d %.2d:%.2d:%.2d", dia, mes, anio, hora, minuto, segundo);
+    sprintf(horario, "%.2d:%.2d", hora, minuto);
+    return String(horario);
+}
 
 String fechaActual()
 {
@@ -730,7 +762,7 @@ bool pruebaTc()
 
         // Almacenar la nueva temperatura en el array y actualizar el índice
         vTemp[0] = nuevaTemperatura;
-        // mostrarValoresTemp();
+        mostrarValoresTemp();
         for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
         {
             vTemp[i] = vTemp[i - 1];
@@ -747,8 +779,78 @@ void ejecutarTc()
     if (pruebaTc())
     {
         int nuevaTemperatura = Temperatura();
-        Serial.println(nuevaTemperatura);
+        Serial.print(nuevaTemperatura);
         myLog("Error", "functions.hpp", "ejecutarTc()", "Error con la medición de la temperatura");
+    }
+}
+
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+
+void mostrarValoresTime()
+{
+    Serial.printf("Valores de tiempo: ");
+    for (int i = 0; i < NUM_VALORES; i++)
+    {
+
+        Serial.print(vTime[i]);
+    }
+    /*for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
+    {
+        vTime[i][6] = vTime[i - 1][6];
+    }*/
+    Serial.printf("\n");
+}
+
+bool pruebaTime()
+{
+    char nuevaHora[6]; // declare the array with enough size
+    char movera1[6];
+    getDateHora().toCharArray(nuevaHora, 6); // copy the string to the array
+    // la funcion convierte el string a un char de longitud 6
+    //  Serial.println(tempC);
+    if (rtcOk)
+    {
+        mostrarValoresTime(); // solo muestra los valores almacenados en el serial
+
+        strcpy(vTime[0], nuevaHora);
+
+        // mostrarValoresTime(); // solo muestra los valores almacenados en el serial
+        Serial.print("La nueva hora es: ");
+        Serial.println(vTime[0]);
+        strcpy(movera1, vTime[0]); //<----- FIXME: no hay valor en vTime por eso no lo pasa
+        Serial.print("Valor movido: ");
+        Serial.println(movera1); // TODO: primero hay que ver que se vea esto
+        Serial.print("Valor esperado: ");
+        Serial.println(vTime[0]); // TODO: primero hay que ver que se vea esto
+        // ahora si hay que hacer el corrimento
+        for (int i = NUM_VALORES; i > 0; i--)
+        {
+            strcpy(vTime[i], vTime[i - 1]); // Copiar cadenas correctamente
+        }
+
+        return false; // este false significa que el valor esta bien
+    }
+    else
+    {
+        strcpy(vTime[0], "Failed");
+        Serial.println("Array actualizado:");
+        for (int i = 0; i < NUM_VALORES; i++)
+        {
+            Serial.print(vTime[i]);
+        }
+
+        return true;
+    }
+}
+
+void ejecutarTime()
+{
+    if (pruebaTime()) // si es verdadero hay un error mostrandome el valor de error
+    {
+        String nuevaHora = getDateHora();
+        myLog("Error", "functions.hpp", "ejecutarTime()", "Error con adquirir el valor de la hora:");
+        Serial.println(nuevaHora);
     }
 }
 
@@ -936,7 +1038,9 @@ void ejecutarLm35()
 //----------------------------------------------------------------------------------------------
 void muestra() // esta funcion toma una muestra de la temperatura y la humedad
 {
-    if (conteografica >= tgrafica)
+    Serial.println(conteografica);
+    // if (conteografica >= tgrafica) //FIXME: en algun lado tgrafica se modifica a un valor
+    if (conteografica >= 1) // FIXME: en algun lado tgrafica se modifica a un valor
     {
         conteografica = 0;
         ejecutarTc();
@@ -944,9 +1048,11 @@ void muestra() // esta funcion toma una muestra de la temperatura y la humedad
         ejecutarTmp1();
         ejecutarTmp2();
         ejecutarLm35();
+        ejecutarTime();
         if ((2 < tempC < 99) && (2 < humedad < 99) && (0 < temp1 < 99) && (0 < temp2 < 99) && (-50 < templm35 < 150))
         {
             dataGraficasSave(); //
+            timeSave();         // salvamos los valores provicionales en la spiffstime
         }
     }
     else

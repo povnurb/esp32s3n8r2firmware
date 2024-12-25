@@ -1,252 +1,106 @@
+// definicion de funciones
+boolean timeRead();
+boolean timeSave();
+void timeReset();
 
-bool dataGraficasSave()
+// funcion que leera el archivo time.json devolviendo un true o false
+//  documentación www.arduinojson.org/v7/
+//  la nueva version de JSON ya calcula el tamaño (excelente)
+
+boolean timeRead()
 {
-    // definicion del json
-    JsonDocument jsonDataTime; // se crea una variable tipo JSON
-    // jsonData es el nombre del documento JSON
-    // acontinuacion una variable de tipo File que se llama de la libreria SPIFFS que se llamará data
-    File dataTime = SPIFFS.open("/dataTime.json", "w+"); // modo escritura (w+) con el path / que es en raiz y el nombre es dataTime con la extención json
-    // cuando se abre asi se borra el contenido y se sobre escribe
-    // mas info sobre SPIFFS https://www.diarioelectronicohoy.com/blog/funcionalidad-de-spiffs
-    if (dataTime)
-    { // si se puede abrir el archivo en modo escritura
-        /********************************************************************************
-         * Zona configuracion Dispositivo dataTime.json asignando nuevo valores         *
-         * a las variables que se encuentran en el archivo file                         *
-         *******************************************************************************/
-        for (int i = 0; i < NUM_VALORES; i++)
-        {
-            jsonDataTime[i] = vTime[i];
-        }
-        serializeJsonPretty(jsonDataTime, dataTime); // escribe en el archivo file
-        // serializeJsonPretty(jsonDataTime, Serial);
-        dataTime.close(); // ya que todo se leera se cierra el archivo
-        // Serial.println("*******************************");
-        // myLog("INFO", "spiffsGraficas.hpp", "dataGraficasSave()", "valor de Timeeratura guardada en dataTime.Json");
-        Serial.flush();
-        // serializeJsonPretty(jsonSettings,Serial); //lo escribe en el monitor serial
-    }
-    else
-    {
-        myLog("ERROR", "spiffsGraficas.hpp", "dataGraficasSave()", "no se puede obteber informacion de la data de Timeeraturas o no existe");
+    JsonDocument jsontime;                            // objeto jsontime donde se leeran las configuraciones iniciales
+    File file = SPIFFS.open("/time.json", FILE_READ); // modo lectura antes o tambien en vez de FILE_READ , "r"
+
+    if (!file)
+    { // instalar la extencion TODO Highlight
+        // FIXME: Serial.println("[WARNING][spiffsTime.hpp][timeRead()]Falla en abrir el archivo time.json");
+        // dejare ese FIXME como ejemplo pero la siguiente linea es la solucion
+        myLog("ERROR", "spiffsTime.hpp", "timeRead()", "Error al abrir el archivo time.json o este no existe");
+        // TODO: llamar a la función de iniciar el json de fabrica (HECHO)
+        timeReset();
         return false;
     }
+    // Deserealizacion del archivo time.json osea, lo que esta en el archivo file
+    // lo pazamos a la variable jsontime gracias a la funcion deserializeJson() y
+    // si eso no sucede dará un error
+    // la deseralizeJson() si todo sale ok devuelve un 0 o false indicando que no hay error
+    // en caso contrario da
+    DeserializationError error = deserializeJson(jsontime, file);
+    // cerramos el archivo este paso es necesario ya que ya no o usaremos y con esto liberamos memoria
+    file.close();
+    // si se presenta un error
+    if (error)
+    {
+        myLog("ERROR", "spiffsTime.hpp", "timeRead()", "Fallo la deserealización del archivo time.json");
+        timeReset();
+        return false;
+    }
+    myLog("INFO", "spiffsTime.hpp", "timeRead()", "Se procede a asignar valores almacenados a las variables");
+    // si ya pasamos todos esos errores, pasaremos a copiar los valores del archivo json a las variables globales
+    // como son de tipo char
 
+    // TODO: funcion for que lee los valores del archivo y los asigna a probar
+    for (int i = 0; i < NUM_VALORES; i++)
+    {
+
+        // strlcpy( vTime[i], jsontime[i] | "", sizeof(mqtt_id));
+        strlcpy(vTime[i], jsontime[i], sizeof(vTime[i]));
+        // vTime[i] = jsontime[i].as<String>();
+    }
+
+    myLog("INFO", "spiffsTime.hpp", "timeRead()", "lecturas de las configuraciones correctamente");
+    // Serial.print("ajuste DHT22: ");
+    // Serial.println(ajTmpDht22);
     return true;
 }
-// definiciones
-void dataGraficasReset()
+
+// Funcion que resetea a los valores de fabrica
+void timeReset()
 {
-    myLog("INFO", "spiffsGraficas.hpp", "dataGraficasReset()", "Reiniciando valores");
+    myLog("INFO", "spiffsTime.hpp", "timeReset()", "Se procede a asignar valores de fabrica");
+
+    // TODO:funcion que asigna el valor inicial de restauracion
     for (int i = 0; i < NUM_VALORES; i++)
     {
-        vTemp[i] = 0;
+        strcpy(vTime[i], "|");
     }
-    for (int i = 0; i < NUM_VALORES; i++)
-    {
-        vHum[i] = 0;
-    }
-    for (int i = 0; i < NUM_VALORES; i++)
-    {
-        vSensorPozo1[i] = 0;
-    }
-    for (int i = 0; i < NUM_VALORES; i++)
-    {
-        vSensorPozo2[i] = 0;
-    }
-    for (int i = 0; i < NUM_VALORES; i++)
-    {
-        vSLm35[i] = 0;
-    }
-    myLog("INFO", "spiffsGraficas.hpp", "dataGraficasReset()", "Guardando valores de 0 en Temperatura y humedad");
-    dataGraficasSave();
+
+    myLog("INFO", "spiffsTime.hpp", "timeReset()", "Se reiniciaron todos los valores por defecto de fabrica");
 }
-
-bool dataGraficasRead()
+// hasta el momento todo esto solo pone en la memoria la información pero aun no se salva y toda la configuración se pierde al reiniciar el dispositivo
+// Guardar configuraciones en el json
+boolean timeSave()
 {
-    myLog("INFO", "spiffsGraficas.hpp", "dataGraficasRead()", "Entrando a leer los datos de temperatura y humedad");
-    JsonDocument jsonDataTemp; // se crea una variable tipo JSON // capacidad definida en globales.hpp (512B)
-    // jsonDataTemp es el nombre del documento JSON
-    // acontinuacion una variable de tipo File que se llama de la libreria SPIFFS que se llamará file
-    File dataTemp = SPIFFS.open("/dataTemp.json", "r"); // modo lectura (r) con el path / que es en raiz y el nombre es settings con la extención json
-    // mas info sobre SPIFFS https://www.diarioelectronicohoy.com/blog/funcionalidad-de-spiffs
-    // se realizara una comparacion if la cual la su interpretación sería, si no se puede deserializar el file en el documento jsonStting
-    // la cual sucede la primera vez por que no existe informacion en file
-    if (deserializeJson(jsonDataTemp, dataTemp))
-    {                                                                         // si no se puede asi funciona esa libreria (deserilizejson) osea si todo ok manda un 0
-        dataGraficasReset();                                                  // se ejecuta esta funcion la cual formatea a los valores de fabrica en este caso a 0
-        DeserializationError error = deserializeJson(jsonDataTemp, dataTemp); // arroja un error y es guardado como error de DeserializationError
-        myLog("ERROR", "spiffsGraficas.hhp", "dataGraficasRead()", "Falló la lectura de las temperaturas, tomando valores por defecto");
-        if (error)
-        {                                                                              // si hay un error nos indicara el error (por que fallo)
-            myLog("ERROR", "spiffsGraficas.hhp", "dataGraficasRead()", error.c_str()); // c_str() es un metodo que convierte a String
-        }
-        return false; // retornamos un valor de false de que no fue posible la deserializacion
-    }
-    else
-    {
-        // osea, que si fue posible deserializar de dataTemp el archivo en la memoria ()-> jsonDataTemp
-        // asignamos lo que esta en jsonDataTemp a las variable en memorias en tiempo de ejecucion.
-        /********************************************************************************
-         * Zona recuperacion de temperaturas de dataTemp.json asignando nuevo valores         *
-         * a las variables que se encuentran en las variables de vTemp                 *
-         *******************************************************************************/
-        for (int i = 0; i < NUM_VALORES; i++)
-        {
-            // jsonDataTemp[i] = vTemp[i]; //error
-            vTemp[i] = jsonDataTemp[i];
-        }
-    }
-    dataTemp.close(); // ya que todo se leera se cierra el archivo
-    myLog("INFO", "spiffsGraficas.hpp", "dataGraficasRead()", "Lectura de las temperaturas DHT22 OK.");
-    Serial.flush();
+    // definicion del json
+    JsonDocument jsontime; // se crea una variable tipo JSON
+    // asignando en el JSON las variables que estan en memoria
+    File dataTime = SPIFFS.open("/time.json", "w+"); // modo escritura (w+) con el path / que es en raiz y el nombre es dataTemp con la extención json
 
-    JsonDocument jsonDataHum; // capacidad definida en globales.hpp (512B)
-    // jsonSettings es el nombre del documento JSON
-    // acontinuacion una variable de tipo File que se llama de la libreria SPIFFS que se llamará file
-    File dataHum = SPIFFS.open("/dataHum.json", "r"); // modo lectura (r) con el path / que es en raiz y el nombre es settings con la extención json
-    // mas info sobre SPIFFS https://www.diarioelectronicohoy.com/blog/funcionalidad-de-spiffs
-    // se realizara una comparacion if la cual la su interpretación sería, si no se puede deserializar el file en el documento jsonStting
-    // la cual sucede la primera vez por que no existe informacion en file
-    if (deserializeJson(jsonDataHum, dataHum))
-    {                                                                       // si no se puede asi funciona esa libreria (deserilizejson) osea si todo ok manda un 0
-        dataGraficasReset();                                                // se ejecuta esta funcion la cual formatea a los valores de fabrica en este caso a 0
-        DeserializationError error = deserializeJson(jsonDataHum, dataHum); // arroja un error y es guardado como error de DeserializationError
-        myLog("ERROR", "spiffsGraficas.hhp", "dataGraficasRead()", "Falló la lectura de las Humedades, tomando valores por defecto");
-        if (error)
-        {                                                                              // si hay un error nos indicara el error (por que fallo)
-            myLog("ERROR", "spiffsGraficas.hhp", "dataGraficasRead()", error.c_str()); // c_str() es un metodo que convierte a String
-        }
-        return false; // retornamos un valor de false de que no fue posible la deserializacion
-    }
-    else
+        // TODO: funcion que guarda los valores
+    for (int i = 0; i < NUM_VALORES; i++)
     {
-        // osea, que si fue posible deserializar de dataTemp el archivo en la memoria ()-> jsonDataHum
-        // asignamos lo que esta en jsonDataHum a las variable en memorias en tiempo de ejecucion.
-        /********************************************************************************
-         * Zona recuperacion de temperaturas de dataHum.json asignando nuevo valores         *
-         * a las variables que se encuentran en las variables de vHum                 *
-         *******************************************************************************/
-        for (int i = 0; i < NUM_VALORES; i++)
-        {
-            // jsonDataHum[i] = vHum[i];
-            vHum[i] = jsonDataHum[i];
-        }
+        // jsontime[i] = vTime[i];
+        jsontime[i] = vTime[i]; // ␘
     }
 
-    dataHum.close(); // ya que todo se leera se cierra el archivo
-    myLog("INFO", "spiffsGraficas.hpp", "dataGraficasRead()", "Lectura de las Humedades DHT22 OK.");
-    Serial.flush();
-
-    JsonDocument jsonDataTempP1; // se crea una variable tipo JSON // capacidad definida en globales.hpp (512B)
-    // jsonDataTempP1 es el nombre del documento JSON
-    // acontinuacion una variable de tipo File que se llama de la libreria SPIFFS que se llamará file
-    File dataTempP1 = SPIFFS.open("/dataTempP1.json", "r"); // modo lectura (r) con el path / que es en raiz y el nombre es settings con la extención json
-    // mas info sobre SPIFFS https://www.diarioelectronicohoy.com/blog/funcionalidad-de-spiffs
-    // se realizara una comparacion if la cual la su interpretación sería, si no se puede deserializar el file en el documento jsonStting
-    // la cual sucede la primera vez por que no existe informacion en file
-    if (deserializeJson(jsonDataTempP1, dataTempP1))
-    {                                                                             // si no se puede asi funciona esa libreria (deserilizejson) osea si todo ok manda un 0
-        dataGraficasReset();                                                      // se ejecuta esta funcion la cual formatea a los valores de fabrica en este caso a 0
-        DeserializationError error = deserializeJson(jsonDataTempP1, dataTempP1); // arroja un error y es guardado como error de DeserializationError
-        myLog("ERROR", "spiffsGraficas.hhp", "dataGraficasRead()", "Falló la lectura de las temperaturas, tomando valores por defecto");
-        if (error)
-        {                                                                              // si hay un error nos indicara el error (por que fallo)
-            myLog("ERROR", "spiffsGraficas.hhp", "dataGraficasRead()", error.c_str()); // c_str() es un metodo que convierte a String
-        }
-        return false; // retornamos un valor de false de que no fue posible la deserializacion
+    //  guardar el json en spiffs
+    File file = SPIFFS.open("/time.json", "w"); // modo escritura
+    if (!file)
+    { // verificamos que el archivo se pueda abrir
+        myLog("ERROR", "spiffsTime.hpp", "timeSave()", "Error en abrir el archivo de configuraciones time.json al guardar la información");
+        return false;
     }
-    else
-    {
-        // osea, que si fue posible deserializar de dataTemp el archivo en la memoria ()-> jsonDataTempP1
-        // asignamos lo que esta en jsonDataTempP1 a las variable en memorias en tiempo de ejecucion.
-        /********************************************************************************
-         * Zona recuperacion de temperaturas de dataTemp.json asignando nuevo valores         *
-         * a las variables que se encuentran en las variables de vSensorPozo1                 *
-         *******************************************************************************/
-        for (int i = 0; i < NUM_VALORES; i++)
-        {
-            // jsonDataTempP1[i] = vSensorPozo1[i]; //error
-            vSensorPozo1[i] = jsonDataTempP1[i];
-        }
+    // guardando y buscando que no se presenten errores
+    if (serializeJson(jsontime, file) == 0)
+    { // manda un numero en caso de no poder realizar la función
+        myLog("ERROR", "spiffsTime.hpp", "serializeJson(jsontime,file)", "Error al serializar el archivo time.json");
+        file.close();
+        return false;
     }
-    dataTempP1.close(); // ya que todo se leera se cierra el archivo
-    myLog("INFO", "spiffsGraficas.hpp", "dataGraficasRead()", "Lectura de las temperaturas Poso1 OK.");
-    Serial.flush();
-
-    JsonDocument jsonDataTempP2; // se crea una variable tipo JSON // capacidad definida en globales.hpp (512B)
-    // jsonDataTempP2 es el nombre del documento JSON
-    // acontinuacion una variable de tipo File que se llama de la libreria SPIFFS que se llamará file
-    File dataTempP2 = SPIFFS.open("/dataTempP2.json", "r"); // modo lectura (r) con el path / que es en raiz y el nombre es settings con la extención json
-    // mas info sobre SPIFFS https://www.diarioelectronicohoy.com/blog/funcionalidad-de-spiffs
-    // se realizara una comparacion if la cual la su interpretación sería, si no se puede deserializar el file en el documento jsonStting
-    // la cual sucede la primera vez por que no existe informacion en file
-    if (deserializeJson(jsonDataTempP2, dataTempP2))
-    {                                                                             // si no se puede asi funciona esa libreria (deserilizejson) osea si todo ok manda un 0
-        dataGraficasReset();                                                      // se ejecuta esta funcion la cual formatea a los valores de fabrica en este caso a 0
-        DeserializationError error = deserializeJson(jsonDataTempP2, dataTempP2); // arroja un error y es guardado como error de DeserializationError
-        myLog("ERROR", "spiffsGraficas.hhp", "dataGraficasRead()", "Falló la lectura de las temperaturas, tomando valores por defecto");
-        if (error)
-        {                                                                              // si hay un error nos indicara el error (por que fallo)
-            myLog("ERROR", "spiffsGraficas.hhp", "dataGraficasRead()", error.c_str()); // c_str() es un metodo que convierte a String
-        }
-        return false; // retornamos un valor de false de que no fue posible la deserializacion
-    }
-    else
-    {
-        // osea, que si fue posible deserializar de dataTemp el archivo en la memoria ()-> jsonDataTempP2
-        // asignamos lo que esta en jsonDataTempP2 a las variable en memorias en tiempo de ejecucion.
-        /********************************************************************************
-         * Zona recuperacion de temperaturas de dataTemp.json asignando nuevo valores         *
-         * a las variables que se encuentran en las variables de vSensorPozo2                 *
-         *******************************************************************************/
-        for (int i = 0; i < NUM_VALORES; i++)
-        {
-            // jsonDataTempP2[i] = vSensorPozo2[i]; //error
-            vSensorPozo2[i] = jsonDataTempP2[i];
-        }
-    }
-    dataTempP2.close(); // ya que todo se leera se cierra el archivo
-    myLog("INFO", "spiffsGraficas.hpp", "dataGraficasRead()", "Lectura de las temperaturas Poso2 OK.");
-    Serial.flush();
-    // LM35
-    JsonDocument jsonDataTempLm35; // se crea una variable tipo JSON // se crea una variable tipo JSON // capacidad definida en globales.hpp (512B)
-    // jsonDataTempP2 es el nombre del documento JSON
-    // acontinuacion una variable de tipo File que se llama de la libreria SPIFFS que se llamará file
-    File dataTempLm35 = SPIFFS.open("/dataTempLm35.json", "r"); // modo lectura (r) con el path / que es en raiz y el nombre es settings con la extención json
-    // mas info sobre SPIFFS https://www.diarioelectronicohoy.com/blog/funcionalidad-de-spiffs
-    // se realizara una comparacion if la cual la su interpretación sería, si no se puede deserializar el file en el documento jsonStting
-    // la cual sucede la primera vez por que no existe informacion en file
-    if (deserializeJson(jsonDataTempLm35, dataTempLm35))
-    {                                                                                 // si no se puede asi funciona esa libreria (deserilizejson) osea si todo ok manda un 0
-        dataGraficasReset();                                                          // se ejecuta esta funcion la cual formatea a los valores de fabrica en este caso a 0
-        DeserializationError error = deserializeJson(jsonDataTempLm35, dataTempLm35); // arroja un error y es guardado como error de DeserializationError
-        myLog("ERROR", "spiffsGraficas.hhp", "dataGraficasRead()", "Falló la lectura de las temperaturas, tomando valores por defecto");
-        if (error)
-        {                                                                              // si hay un error nos indicara el error (por que fallo)
-            myLog("ERROR", "spiffsGraficas.hhp", "dataGraficasRead()", error.c_str()); // c_str() es un metodo que convierte a String
-        }
-        return false; // retornamos un valor de false de que no fue posible la deserializacion
-    }
-    else
-    {
-        // osea, que si fue posible deserializar de dataTemp el archivo en la memoria ()-> jsonDataTempLm35
-        // asignamos lo que esta en jsonDataTempLm35 a las variable en memorias en tiempo de ejecucion.
-        /********************************************************************************
-         * Zona recuperacion de temperaturas de dataTemp.json asignando nuevo valores         *
-         * a las variables que se encuentran en las variables de vSensorPozo2                 *
-         *******************************************************************************/
-        for (int i = 0; i < NUM_VALORES; i++)
-        {
-            // jsonDataTempLm35[i] = vSensorPozo2[i]; //error
-            vSLm35[i] = jsonDataTempLm35[i];
-        }
-    }
-    dataTempLm35.close(); // ya que todo se leera se cierra el archivo
-    myLog("INFO", "spiffsGraficas.hpp", "dataGraficasRead()", "Lectura de las temperaturas LM35 OK.");
-    Serial.flush();
-    // final
-    // mostrarValoresTemp();
-    // mostrarValoresHum();
+    file.close();
+    myLog("INFO", "spiffsTime.hpp", "timeSave()", "Se guardaron las configuraciones en el archivo time.json");
+    // mostrar el time.json en el monitor
+    // serializeJsonPretty(jsontime, Serial);
     return true;
 }

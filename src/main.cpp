@@ -30,7 +30,8 @@
 #include "settings.hpp"
 #include "wifi.hpp"
 #include "mqtt.hpp"
-#include "spiffsGraficas.hpp"
+#include "spiffsGraficas.hpp" //archivo donde se guardan en json los datos de muestreo
+#include "spiffsTime.hpp"     //archiva dond se guarda la fecha de muestreo
 // metemos la libreria del servidor
 #include "server.hpp"
 #include "websockets.hpp"
@@ -78,6 +79,10 @@ void setup()
   if (!settingsRead())
   { // al negarlo se vuelve un verdadero
     settingsSave();
+  }
+  if (!timeRead())
+  { // al negarlo se vuelve un verdadero
+    timeSave();
   }
   // Data Graficas
   //  traer las datas resientes desde json
