@@ -1735,7 +1735,7 @@ String apiGetIndexWs()
     tdht22Obj["cT20"] = vTemp[21];
     tdht22Obj["cT21"] = vTemp[22];
     tdht22Obj["cT22"] = vTemp[23];
-    tdht22Obj["cT23"] = vTemp[24];
+    // tdht22Obj["cT23"] = vTemp[24];
     JsonObject hdht22Obj = jsonDoc["hdht22"].to<JsonObject>();
     hdht22Obj["cH0"] = vHum[1];
     hdht22Obj["cH1"] = vHum[2];
@@ -1760,7 +1760,7 @@ String apiGetIndexWs()
     hdht22Obj["cH20"] = vHum[21];
     hdht22Obj["cH21"] = vHum[22];
     hdht22Obj["cH22"] = vHum[23];
-    hdht22Obj["cH23"] = vHum[24];
+    // hdht22Obj["cH23"] = vHum[24];
     JsonObject tEvaObj = jsonDoc["tEva"].to<JsonObject>();
     tEvaObj["tE0"] = vSensorPozo1[1];
     tEvaObj["tE1"] = vSensorPozo1[2];
@@ -1785,7 +1785,7 @@ String apiGetIndexWs()
     tEvaObj["tE20"] = vSensorPozo1[21];
     tEvaObj["tE21"] = vSensorPozo1[22];
     tEvaObj["tE22"] = vSensorPozo1[23];
-    tEvaObj["tE23"] = vSensorPozo1[24];
+    // tEvaObj["tE23"] = vSensorPozo1[24];
     JsonObject tCondObj = jsonDoc["tCond"].to<JsonObject>();
     tCondObj["tC0"] = vSensorPozo2[1];
     tCondObj["tC1"] = vSensorPozo2[2];
@@ -1810,7 +1810,7 @@ String apiGetIndexWs()
     tCondObj["tC20"] = vSensorPozo2[21];
     tCondObj["tC21"] = vSensorPozo2[22];
     tCondObj["tC22"] = vSensorPozo2[23];
-    tCondObj["tC23"] = vSensorPozo2[24];
+    // tCondObj["tC23"] = vSensorPozo2[24];
     JsonObject tObj = jsonDoc["timeM"].to<JsonObject>();
     tObj["tm0"] = vTime[1];
     tObj["tm1"] = vTime[2];
@@ -1835,8 +1835,8 @@ String apiGetIndexWs()
     tObj["tm20"] = vTime[21];
     tObj["tm21"] = vTime[22];
     tObj["tm22"] = vTime[23];
-    tObj["tm23"] = vTime[24];
-    // Serializar
+    // tObj["tm23"] = vTime[24];
+    //  Serializar
     serializeJsonPretty(jsonDoc, response);
     return response;
 }
