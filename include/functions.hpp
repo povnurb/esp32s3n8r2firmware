@@ -816,14 +816,14 @@ bool pruebaTime()
         strcpy(vTime[0], nuevaHora);
 
         // mostrarValoresTime(); // solo muestra los valores almacenados en el serial
-        Serial.print("La nueva hora es: ");
-        Serial.println(vTime[0]);
+        // Serial.print("La nueva hora es: ");
+        // Serial.println(vTime[0]);
         strcpy(movera1, vTime[0]); //<----- FIXME: no hay valor en vTime por eso no lo pasa
-        Serial.print("Valor movido: ");
-        Serial.println(movera1); // TODO: primero hay que ver que se vea esto
-        Serial.print("Valor esperado: ");
-        Serial.println(vTime[0]); // TODO: primero hay que ver que se vea esto
-        // ahora si hay que hacer el corrimento
+        // Serial.print("Valor movido: ");
+        // Serial.println(movera1); // TODO: primero hay que ver que se vea esto
+        // Serial.print("Valor esperado: ");
+        // Serial.println(vTime[0]); // TODO: primero hay que ver que se vea esto
+        //  ahora si hay que hacer el corrimento
         for (int i = NUM_VALORES; i > 0; i--)
         {
             strcpy(vTime[i], vTime[i - 1]); // Copiar cadenas correctamente
@@ -1039,25 +1039,19 @@ void ejecutarLm35()
 void muestra() // esta funcion toma una muestra de la temperatura y la humedad
 {
     Serial.println(conteografica);
-    // if (conteografica >= tgrafica) //FIXME: en algun lado tgrafica se modifica a un valor
-    if (conteografica >= 1) // FIXME: en algun lado tgrafica se modifica a un valor
+    Serial.println(tgrafica); // en algun momento se modifica este valor
+
+    conteografica = 0;
+    ejecutarTc();
+    ejecutarHum();
+    ejecutarTmp1();
+    ejecutarTmp2();
+    ejecutarLm35();
+    ejecutarTime();
+    if ((1 < tempC < 99) && (1 < humedad < 99) && (1 < temp1 < 99) && (1 < temp2 < 99) && (-50 < templm35 < 150))
     {
-        conteografica = 0;
-        ejecutarTc();
-        ejecutarHum();
-        ejecutarTmp1();
-        ejecutarTmp2();
-        ejecutarLm35();
-        ejecutarTime();
-        if ((2 < tempC < 99) && (2 < humedad < 99) && (0 < temp1 < 99) && (0 < temp2 < 99) && (-50 < templm35 < 150))
-        {
-            dataGraficasSave(); //
-            timeSave();         // salvamos los valores provicionales en la spiffstime
-        }
-    }
-    else
-    {
-        conteografica++;
+        dataGraficasSave(); //
+        timeSave();         // salvamos los valores provicionales en la spiffstime
     }
 }
 

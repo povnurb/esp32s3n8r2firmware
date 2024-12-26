@@ -1051,10 +1051,11 @@ bool apiPostControlDevice(const String &command) // cambiar el nombre de la func
         BUZZER_STATUS = buzzerValue ? HIGH : LOW;
         return true;
     }
-    else if (output.startsWith("tgrafica"))
+    else if (output.startsWith("TIMEGRAFICA"))
     {
-        tgrafica = jsonCommand["value"].as<int>();
-        tgrafica = constrain(tgrafica, 1, 1440); // sera un valor min de 1 y maximo de 1440 (1 dia)
+        int tgraf = jsonCommand["value"].as<int>();
+        tgrafica = constrain(tgraf, 1, maxTimeMin); // sera un valor min de 1 y maximo de 1440 (1 dia)
+        // Serial.println(tgrafica);
         settingsSave();
         return true;
     }
@@ -1686,27 +1687,7 @@ String apiGetIndexWs()
         alarms["count"] = cont[i];
         alarmsObj.add(alarms);
     }
-    /*
-    JsonObject alarmasObj = jsonDoc["alarms"].to<JsonObject>();
-    alarmasObj["cantidad"] = NUM_ALARMS;
-    alarmasObj["prueba_de_alarmas"] = prueba;
-    //JsonArray alarmsObj = jsonDoc["alarmas"].to<JsonArray>();
-    JsonArray alarmsObj = alarmasObj["alarmas"].to<JsonArray>();
-    for (size_t i = 0; i < NUM_ALARMS; ++i)
-    {
-        JsonDocument obj;
-        JsonObject alarms = obj.to<JsonObject>();
-        alarms["numero"] = i + 1;               // falta actualizar
-        alarms["name"] = ALARM_NAME[i].c_str(); // falta actualizar
-        alarms["logic"] = logicas[i];
-        alarms["status"] = ALARM_STATUS[i];
-        alarms["reconocida"] = reconocidas[i]; // TODO: verificar
-        alarms["on"] = fechaAct[i].c_str();
-        alarms["off"] = fechaClear[i].c_str();
-        alarms["count"] = cont[i];
-        alarmsObj.add(alarms);
-    }
-    */
+
     // salidas creandolas en bufers
     JsonDocument relay01Obj;
     JsonDocument relay02Obj;
@@ -1830,6 +1811,31 @@ String apiGetIndexWs()
     tCondObj["tC21"] = vSensorPozo2[22];
     tCondObj["tC22"] = vSensorPozo2[23];
     tCondObj["tC23"] = vSensorPozo2[24];
+    JsonObject tObj = jsonDoc["timeM"].to<JsonObject>();
+    tObj["tm0"] = vTime[1];
+    tObj["tm1"] = vTime[2];
+    tObj["tm2"] = vTime[3];
+    tObj["tm3"] = vTime[4];
+    tObj["tm4"] = vTime[5];
+    tObj["tm5"] = vTime[6];
+    tObj["tm6"] = vTime[7];
+    tObj["tm7"] = vTime[8];
+    tObj["tm8"] = vTime[9];
+    tObj["tm9"] = vTime[10];
+    tObj["tm10"] = vTime[11];
+    tObj["tm11"] = vTime[12];
+    tObj["tm12"] = vTime[13];
+    tObj["tm13"] = vTime[14];
+    tObj["tm14"] = vTime[15];
+    tObj["tm15"] = vTime[16];
+    tObj["tm16"] = vTime[17];
+    tObj["tm17"] = vTime[18];
+    tObj["tm18"] = vTime[19];
+    tObj["tm19"] = vTime[20];
+    tObj["tm20"] = vTime[21];
+    tObj["tm21"] = vTime[22];
+    tObj["tm22"] = vTime[23];
+    tObj["tm23"] = vTime[24];
     // Serializar
     serializeJsonPretty(jsonDoc, response);
     return response;

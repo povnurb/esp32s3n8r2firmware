@@ -63,7 +63,7 @@ void timeReset()
     // TODO:funcion que asigna el valor inicial de restauracion
     for (int i = 0; i < NUM_VALORES; i++)
     {
-        strcpy(vTime[i], "|");
+        strcpy(vTime[i], ""); // si no se le pone este valor vacio, loquea el codigo con las variables
     }
 
     myLog("INFO", "spiffsTime.hpp", "timeReset()", "Se reiniciaron todos los valores por defecto de fabrica");
@@ -77,7 +77,7 @@ boolean timeSave()
     // asignando en el JSON las variables que estan en memoria
     File dataTime = SPIFFS.open("/time.json", "w+"); // modo escritura (w+) con el path / que es en raiz y el nombre es dataTemp con la extención json
 
-        // TODO: funcion que guarda los valores
+    // TODO: funcion que guarda los valores
     for (int i = 0; i < NUM_VALORES; i++)
     {
         // jsontime[i] = vTime[i];

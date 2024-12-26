@@ -157,7 +157,7 @@ void setup()
   xTaskCreatePinnedToCore(TaskActualiza10seg, "TaskActualiza10seg", 1024 * 8, NULL, 1, &Actualiza10segTaskHandle, 1);
   // tarea que toma la muestras para la grafica
   TaskHandle_t timeGraficaTaskHandle;
-  xTaskCreatePinnedToCore(TaskTimeGrafica, "TaskTimeGrafica", 1024 * 8, NULL, 1, &timeGraficaTaskHandle, 1);
+  xTaskCreatePinnedToCore(TaskTimeGrafica, "TaskTimeGrafica", 1024 * 12, NULL, 1, &timeGraficaTaskHandle, 1);
   // Crear una tarea verifique el boton d15 si se requiere una restauracion de fabrica o restart
   TaskHandle_t taskRestoreTaskHandle;
   xTaskCreatePinnedToCore(TaskRestore, "TaskRestore", 1024 * 8, NULL, 1, &taskRestoreTaskHandle, 1);

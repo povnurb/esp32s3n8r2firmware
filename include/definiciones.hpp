@@ -158,11 +158,10 @@ bool CRELAY2;       // para que conmute en las fechas
 //------------------------------------------------------------------------------
 #define NUM_VALORES 24 // es el numero de muestras que quiero registrar esta no se mueve siempre sera 24 por que asi esta en la pagina web
 int conteografica = 0; // para que lleve el conteo del tiempo
-int maxTimeMin = 1440; // maximo tiempo que mide el potenciometro y comparte el maximo ciclo de trabajo
+int maxTimeMin = 60;   // maximo tiempo en minutos que toma una muestra de los valores de temp y humedad
 int tgrafica;          // tiempo en minutos que indica cada cuantos minutos toma una muestra y guardar en minutos
-int diesSeg = 6;
-int minutos = 60;
-char vTime[NUM_VALORES][6];    // Array para almacenar los valores de fecha con hasta 20 caracteres
+
+char vTime[NUM_VALORES][7];    // Array para almacenar los valores de fecha con hasta 10 caracteres para que guarde espacio
 int vTemp[NUM_VALORES];        // Array para almacenar los valores de temperatura
 int vHum[NUM_VALORES];         // Array para almacenar los valores de humedad
 int vSensorPozo1[NUM_VALORES]; // Array para almacenar los valores de temperatura del pozo1
