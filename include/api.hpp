@@ -223,7 +223,7 @@ void handleApiPostFecha(AsyncWebServerRequest *request, uint8_t *data, size_t le
     validateUserAndPasswordResponse(request);
     String bodyContent = GetBodyContent(data, len);
     // save
-    if (apiPostFecha(bodyContent)) // para almacenar la data de MQTT
+    if (apiPostFecha(bodyContent))
     {
         request->addInterestingHeader(HEADER_TEXT);
         request->send(200, dataTypeJson, JSON_SAVE_TRUE);

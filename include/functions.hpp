@@ -755,9 +755,9 @@ void mostrarValoresTemp()
 
 bool pruebaTc()
 {
-    int nuevaTemperatura = Temperatura();
+    int nuevaTemperatura = Temperatura() * 10;
     // Serial.println(tempC);
-    if (-5 < nuevaTemperatura < 99)
+    if (1 < nuevaTemperatura < 999)
     {
 
         // Almacenar la nueva temperatura en el array y actualizar el índice
@@ -870,7 +870,7 @@ bool pruebaHum()
 {
     if (10 < humedad < 99)
     {
-        int nuevaHum = humedad;
+        int nuevaHum = humedad * 10;
         // Almacenar la nueva temperatura en el array y actualizar el índice
         vHum[0] = nuevaHum;
         // mostrarValoresHum();
@@ -914,7 +914,7 @@ void mostrarValoresTmp1()
 bool pruebaTmp1()
 {
     // Serial.println(temp1);
-    if (0 < temp1 < 99)
+    if (1 < temp1 < 99)
     {
         int nuevaTemperatura = temp1;
         // Almacenar la nueva temperatura en el array y actualizar el índice
@@ -1048,7 +1048,7 @@ void muestra() // esta funcion toma una muestra de la temperatura y la humedad
     ejecutarTmp2();
     ejecutarLm35();
     ejecutarTime();
-    if ((1 < tempC < 99) && (1 < humedad < 99) && (1 < temp1 < 99) && (1 < temp2 < 99) && (-50 < templm35 < 150))
+    if ((1 < tempC < 99) && (1 < humedad < 99) && (1 < temp1 < 99) && (1 < temp2 < 99) && (1 < templm35 < 150))
     {
         dataGraficasSave(); //
         timeSave();         // salvamos los valores provicionales en la spiffstime
