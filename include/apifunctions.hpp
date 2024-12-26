@@ -8,51 +8,25 @@ String apiHistorialAlarmas() // FIXME: no se puede por que el archivo de origen 
 {
     // https://www.diarioelectronicohoy.com/blog/funcionalidad-de-spiffs
     String response = "";
-    JsonDocument jsonAlarmHistorial;                  // objeto jsonAlarmHistorial donde se leeran las configuraciones iniciales
-    File file = SPIFFS.open("/historial.json", "a+"); // modo lectura antes o tambien en vez de FILE_READ , "r"
-    File file2 = SPIFFS.open("/alarmas.json", "r");   // modo lectura antes o tambien en vez de FILE_READ , "r"
 
-    if (!file || !file2)
+    JsonDocument jsonAlarmHistorial; // objeto jsonAlarmHistorial donde se leeran las configuraciones iniciales
+
+    File file = SPIFFS.open("/alarmas.json", "r"); // modo lectura antes o tambien en vez de FILE_READ , "r"
+
+    if (!file)
     { // instalar la extencion TODO Highlight
         // FIXME: Serial.println("[WARNING][settings.hpp][settingsRead()]Falla en abrir el archivo settings.json");
         // dejare ese FIXME como ejemplo pero la siguiente linea es la solucion
-        myLog("ERROR", "apifunctions.hpp", "apiHistorialAlarmas()", "Error los archivos");
+        myLog("ERROR", "apifunctions.hpp", "apiHistorialAlarmas()", "Error al abrir el archivo alarmas.json");
         // TODO: llamar a la función de iniciar el json de fabrica (HECHO)
         return response;
     }
-    file.print('[');
-    while (file2.available()) // TODO: a probar
-    {
-        // Permite leer línea por línea desde el archivo
-        // String line = file2.readStringUntil('\n');
-        String line = file2.readString();
-        file.print(line);
-    }
-    // se agrega ]
-    file.print(']');
+    myLog("INFO", "apifunctions.hpp", "apiHistorialAlarmas()", "Entregando archivo");
+    String contenido = file.readString();
+    response = "[" + contenido + "]"; // para que se vea JSON
 
-    // Permite leer línea por línea desde el archivo
-    // String line = file.readStringUntil('\n');
-    String line = file.readString();
-    Serial.print(line);
-
-    DeserializationError error = deserializeJson(jsonAlarmHistorial, file); //<-----
-    if (error)
-    {
-        myLog("ERROR", "apifunctions.hpp", "apiHistorialAlarmas()", "Fallo la deserealización del archivo alarmas.json en jsonAlarmHistorial");
-        return response;
-    }
-
-    file2.close();
     file.close();
 
-    if (SPIFFS.remove("/historial.json"))
-    {
-        myLog("INFO", "apifunctions.hpp", "apiHistorialAlarmas()", "Archivo de historial borrado");
-    }
-    serializeJson(jsonAlarmHistorial, response);
-    // serializeJson(jsonAlarmHistorial, Serial);
-    //  return String(file.readString().c_str());
     return response;
 }
 

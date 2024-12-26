@@ -7,16 +7,6 @@ usaremos los GPIO 08(SDA) y 09(SCL) para el display OLED
 // boton de interrupción para la activacion de alarmas
 #define tiempoDeRebote 1500 // sirve para omitir rebotes
 
-// otro sensor de temperatura
-// https://www.electrontools.com/Home/WP/sensor-de-temperatura-ds1820/
-
-// para el sensor LM35 que es mi caso
-// https://esp32io.com/tutorials/esp32-lm35-temperature-sensor
-// https:// www.makerguides.com/interfacing-esp32-and-lm35-temperature-sensor/
-#define ADC_VREF_mV 3300.0 // in millivolt podria utilizar un ajuste con un potenciometro
-#define ADC_RESOLUTION 4096.0
-#define LM35 1 //  sensor de temperatura de 0°C a 150°C
-
 //----------------------------------------------------------------
 // para el sensor de pozo
 // https://www.instructables.com/Temperatura-con-Termistor-NTC-10k-y-Arduino/
@@ -29,6 +19,14 @@ usaremos los GPIO 08(SDA) y 09(SCL) para el display OLED
 // cantidades--------------------------------
 #define NUM_RELAYS 2 // numero de relays que tiene la placa
 #define NUM_ALARMS 8 // numero de alarmas que tiene la placa
+// otro sensor de temperatura
+// https://www.electrontools.com/Home/WP/sensor-de-temperatura-ds1820/
+// para el sensor LM35 que es mi caso
+// https://esp32io.com/tutorials/esp32-lm35-temperature-sensor
+// https:// www.makerguides.com/interfacing-esp32-and-lm35-temperature-sensor/
+#define ADC_VREF_mV 3300.0 // in millivolt podria utilizar un ajuste con un potenciometro
+#define ADC_RESOLUTION 4096.0
+#define LM35 1 //  sensor de temperatura de 0°C a 150°C
 // pines------------------------------------------
 #define BTNMENU 45          // TODO:boton que dara acceso a mostrar mas informacion
 #define BUZZER 21           // GPIO 21 ZUMBADOR
@@ -44,8 +42,8 @@ usaremos los GPIO 08(SDA) y 09(SCL) para el display OLED
 #define RELAY2 18           // GPIO 18 Relevador2
 #define ACTRELE2 46         // boton de prueba del relay2
 #define DIMMER 19           // led DIMMER
-#define RELOJSDA 4          // pala el RTC
-#define RELOJSCL 5          // para el RTC
+#define RELOJSDA 4          // pala el RTC y OLED
+#define RELOJSCL 5          // para el RTC y OLED
 #define SENSOREVAPORADOR 6  // pin analogo
 #define SENSORCONDENSADOR 7 // pin analogo
 #define ACTFECHA 20         // pin para actualizar la fecha
