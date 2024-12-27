@@ -233,7 +233,8 @@ void initServer()
         {"/js/671.js", file_671_js, file_671_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/724.js", file_724_js, file_724_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/837.js", file_837_js, file_837_js_length, dataTypeJavaScripts, dataEncoding},
-        {"/js/855.js", file_855_js, file_855_js_length, dataTypeJavaScripts, dataEncoding},
+        //{"/js/855.js", file_855_js, file_855_js_length, dataTypeJavaScripts, dataEncoding},
+        {"/js/887.js", file_887_js, file_887_js_length, dataTypeJavaScripts, dataEncoding},
         {"/fonts/bootstrap-icons.woff", bootstrap_icons_woff, bootstrap_icons_woff_length, dataTypeWOFF, dataEncoding},
         {"/fonts/bootstrap-icons.woff2", bootstrap_icons_woff2, bootstrap_icons_woff2_length, dataTypeWOFF2, dataEncoding},
 
