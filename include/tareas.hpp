@@ -167,8 +167,8 @@ void TaskTimeGrafica(void *pvParameters)
     while (1)
     {
         muestra();
-        // vTaskDelay(600000 / portTICK_PERIOD_MS); // para que de 1 minuto portTICK_PERIOD_MS
-        vTaskDelay(300000 / portTICK_PERIOD_MS); // para 2 minuto portTICK_PERIOD_MS
+        // vTaskDelay(600000 / portTICK_PERIOD_MS); // para que de 10 portTICK_PERIOD_MS
+        vTaskDelay(600000 / portTICK_PERIOD_MS); // para 2 minuto portTICK_PERIOD_MS
     }
 }
 

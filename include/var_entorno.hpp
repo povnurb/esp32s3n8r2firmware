@@ -5,7 +5,7 @@ String gerencia;
 String ciudad;                    // de 6 digitos minuscula en settingsreset()
 String central;                   // de 6 digitos minuscula
 String sala;                      // de 7 digitos minuscula
-String DeviceName = "HGO-PTTI-2"; // donde se encuentra el dispositivo instalado
+String DeviceName = "HGO-PTTI-2"; // es el mdns que se le desa poner
 String Administrador = "admin";
 String Contra = "personal"; // tanto para modo AP
 // Acceso WiFi
@@ -13,7 +13,7 @@ String SSID = "INFINITUMD378";       //"INFINITUMD378"(hogar), "INFINITUM3213"(t
 String SSID2 = "INFINITUM3213";      //"INFINITUMD378"(hogar), "INFINITUM3213"(trabajo)
 String WifiPassword = "Pm2Kj1Jg6j";  //"Pm2Kj1Jg6j"(hogar),"6cyH34xK4f"(trabajo)
 String WifiPassword2 = "6cyH34xK4f"; //"Pm2Kj1Jg6j"(hogar),"6cyH34xK4f"(trabajo)
-boolean WifiMode = true;            // true es igual modo estacion osea false en modo AP
+boolean WifiMode = true;             // true es igual modo estacion osea false en modo AP
 // boolean switchModeAP = true;        // ejemplo de sustitucion de un swithch que cambia el modo de manera manual false = AP
 //  la variable switchModeAp en true significa que no cambia a modo stacion por default en false
 boolean DHCP = true;
