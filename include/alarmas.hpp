@@ -742,7 +742,7 @@ void alarmasReset()
 {
     alarma = "El historial de alarmas inicia";
     fechas = getDateTime();
-    status = false;
+    status = true;
     myLog("INFO", "alarmas.hpp", "alarmasReset()", "creando archivo de alarmas");
 }
 
