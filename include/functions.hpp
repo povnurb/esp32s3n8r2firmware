@@ -537,6 +537,7 @@ bool validationWifiParam(JsonDocument &jsonDoc)
 {
     const char *wifiKeys[] = {
         "wifi_mode",
+        "device_name",
         "wifi_ssid",
         "wifi_password",
         "wifi_ssid2",

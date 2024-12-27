@@ -166,6 +166,7 @@ String apiGetWifi()
     // wifi
     JsonObject wifiObj = jsonDoc["wifi"].to<JsonObject>();
     wifiObj["wifi_mode"] = wifi_mode ? true : false;
+    wifiObj["device_name"] = device_name; // para el mdns
     wifiObj["wifi_ssid"] = wifi_ssid;
     wifiObj["wifi_password"] = "";
     wifiObj["wifi_ssid2"] = wifi_ssid2;
@@ -210,6 +211,11 @@ boolean apiPostWifi(String data)
 
     // asignar valores a las variables
     wifi_mode = doc["wifi_mode"].as<bool>();
+    // wifiObj["device_name"] = String(device_name);
+    if (doc["device_name"] && doc["device_name"].as<String>().length() > 0)
+    {
+        strlcpy(device_name, doc["device_name"].as<String>().c_str(), sizeof(device_name));
+    }
     // ssid
     if (doc["wifi_ssid"] && doc["wifi_ssid"].as<String>().length() > 0)
     {
