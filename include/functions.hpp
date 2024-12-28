@@ -777,7 +777,7 @@ bool pruebaTc()
 
         // Almacenar la nueva temperatura en el array y actualizar el índice
         vTemp[0] = nuevaTemperatura;
-        mostrarValoresTemp();
+        // mostrarValoresTemp();
         Serial.flush();
         for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
         {
