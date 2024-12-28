@@ -7,7 +7,7 @@ AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");           // access at ws://[esp ip]/ws
 AsyncEventSource events("/events"); // event source (Server-Sent events) escucha loseventos
 
-bool security = false; // si esta en true pide usuario y contraseña
+bool security = true; // si esta en true pide usuario y contraseña
 
 // validar usuario y contraseña
 void validateUserAndPasswordResponse(AsyncWebServerRequest *request)
@@ -161,10 +161,10 @@ void initServer()
     // method: POST
     server.on("/api/device/logout", HTTP_POST, [](AsyncWebServerRequest *request)
               {
-        //validadacion del usuario y contraseña
-        validateUserAndPasswordResponse(request);
-    request->addInterestingHeader(HEADER_TEXT); 
-    request->send(401, dataTypeJson, "{\"sesion\":false,\"msg\":\"Sesion cerrada correctamente\"}"); });
+                  // validadacion del usuario y contraseña
+                  validateUserAndPasswordResponse(request);
+                  request->addInterestingHeader(HEADER_TEXT);
+                  request->send(401, dataTypeJson, "{\"sesion\":false,\"msg\":\"Sesion cerrada correctamente\"}"); });
 
     //-------------------------------------------------------------------------------------------
     /*
