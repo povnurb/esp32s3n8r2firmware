@@ -80,8 +80,8 @@ void setup()
   { // al negarlo se vuelve un verdadero
     settingsSave();
   }
-  if (!timeRead())
-  { // al negarlo se vuelve un verdadero
+  if (!timeRead()) // para las graficas
+  {                // al negarlo se vuelve un verdadero
     timeSave();
   }
   // Data Graficas

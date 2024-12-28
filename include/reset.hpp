@@ -76,7 +76,7 @@ void resetIntLoop()
             // reseteo a Fabrica
             myLog("INFO", "functions.hpp", "resetIntLoop()", "Borrando datos de temperatura y humedad");
             dataGraficasReset();
-            settingsReset(); // verificar por que no lo pone en modo ap
+            settingsReset();
             if (settingsSave())
             {
                 conteo = 0;

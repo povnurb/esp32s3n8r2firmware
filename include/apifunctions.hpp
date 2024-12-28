@@ -3,6 +3,10 @@
 // void setupPinAlarma1();
 boolean deleteArchivoAlarmas();
 void enviarMensaje(String mensaje);
+void timeReset();
+void dataGraficasReset();
+boolean timeSave();
+bool dataGraficasSave();
 
 String apiHistorialAlarmas() // FIXME: no se puede por que el archivo de origen agrega "," y ya no es un JSON
 {
@@ -949,7 +953,10 @@ void apiPostRestore(const char *origen)
 {
     settingsReset(); // para volve a los valores de fabrica
     deleteArchivoAlarmas();
-    if (settingsSave())
+    timeReset();
+    dataGraficasReset();
+
+    if (settingsSave() && timeSave() && dataGraficasSave())
     {
         apiPostRestart(origen);
     }

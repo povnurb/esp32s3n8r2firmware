@@ -13,7 +13,7 @@ void relojSetup()
     else
     {
         rtcOk = true;
-        rtc.adjust(DateTime(__DATE__, __TIME__)); // entrega la hora de la PC al dispositivo (ds3231)
+        // rtc.adjust(DateTime(__DATE__, __TIME__)); // entrega la hora de la PC al dispositivo (ds3231)
         myLog("INFO", "main.cpp", "rtc.adjust()", "RTC ENCONTRADO FECHA:");
         Serial.println(getDateTime());
     }

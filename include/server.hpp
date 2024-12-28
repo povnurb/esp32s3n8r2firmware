@@ -7,7 +7,7 @@ AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");           // access at ws://[esp ip]/ws
 AsyncEventSource events("/events"); // event source (Server-Sent events) escucha loseventos
 
-bool security = true; // si esta en true pide usuario y contraseña
+bool security = false; // si esta en true pide usuario y contraseña
 
 // validar usuario y contraseña
 void validateUserAndPasswordResponse(AsyncWebServerRequest *request)
