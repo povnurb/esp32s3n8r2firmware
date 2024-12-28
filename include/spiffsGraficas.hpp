@@ -1,4 +1,5 @@
 
+void mostrarValoresTemp();
 bool dataGraficasSave()
 {
     // definicion del json

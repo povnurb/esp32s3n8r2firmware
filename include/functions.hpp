@@ -302,17 +302,17 @@ float readSensorPozo(int pinsensor)
 DHT dht(DHTPIN, DHT22);
 float Temperatura() // para la otra mandar un String
 {
-    if (isnan(dht.readTemperature()))
-    {   
-        tempC = dht.readTemperature();
-        Serial.print(tempC);
-        //aqui hay que forzar por que el primer valor 
+    if (isnan(dht.readTemperature())) // esta listo para medir
+    {
+
+        // aqui hay que forzar por que el primer valor
         tempC = tempC;
-        if(tempC <= 0){
+        if (tempC <= 0)
+        {
             myLog("ERROR", "functions.hpp", "Temperatura()", "error en la medicion del Dht22");
             tempC = dht.readTemperature();
         }
-        myLog("ERROR", "functions.hpp", "Temperatura()", "error en la medicion del Dht22");
+        myLog("ERROR", "functions.hpp", "Temperatura()", "error en la medicion del Dht22 conservamos el ultimo valor");
     }
     else
     {
@@ -325,7 +325,13 @@ float Humedad()
 {
     if (isnan(dht.readHumidity()))
     {
-        humedad = 0;
+        humedad = humedad;
+        if (humedad <= 0)
+        {
+            myLog("ERROR", "functions.hpp", "humedad()", "error en la medicion del Dht22");
+            humedad = dht.readHumidity(); // lo volvemos a intentar
+        }
+        myLog("ERROR", "functions.hpp", "humedad()", "error en la medicion del Dht22 conservamos el ultimo valor");
     }
     else
     {
@@ -772,10 +778,13 @@ bool pruebaTc()
         // Almacenar la nueva temperatura en el array y actualizar el índice
         vTemp[0] = nuevaTemperatura;
         mostrarValoresTemp();
+        Serial.flush();
         for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
         {
             vTemp[i] = vTemp[i - 1];
         }
+        mostrarValoresTemp();
+        Serial.flush();
         return false;
     }
     else
@@ -790,76 +799,6 @@ void ejecutarTc()
         int nuevaTemperatura = Temperatura();
         Serial.print(nuevaTemperatura);
         myLog("Error", "functions.hpp", "ejecutarTc()", "Error con la medición de la temperatura");
-    }
-}
-
-//----------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------
-
-void mostrarValoresTime()
-{
-    Serial.printf("Valores de tiempo: ");
-    for (int i = 0; i < NUM_VALORES; i++)
-    {
-
-        Serial.print(vTime[i]);
-    }
-    /*for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
-    {
-        vTime[i][6] = vTime[i - 1][6];
-    }*/
-    Serial.printf("\n");
-}
-
-bool pruebaTime()
-{
-    char nuevaHora[6]; // declare the array with enough size
-    char movera1[6];
-    getDateHora().toCharArray(nuevaHora, 6); // copy the string to the array
-    // la funcion convierte el string a un char de longitud 6
-    //  Serial.println(tempC);
-    if (rtcOk)
-    {
-        mostrarValoresTime(); // solo muestra los valores almacenados en el serial
-
-        strcpy(vTime[0], nuevaHora);
-
-        // mostrarValoresTime(); // solo muestra los valores almacenados en el serial
-        // Serial.print("La nueva hora es: ");
-        // Serial.println(vTime[0]);
-        strcpy(movera1, vTime[0]); //<----- FIXME: no hay valor en vTime por eso no lo pasa
-        // Serial.print("Valor movido: ");
-        // Serial.println(movera1); // TODO: primero hay que ver que se vea esto
-        // Serial.print("Valor esperado: ");
-        // Serial.println(vTime[0]); // TODO: primero hay que ver que se vea esto
-        //  ahora si hay que hacer el corrimento
-        for (int i = NUM_VALORES; i > 0; i--)
-        {
-            strcpy(vTime[i], vTime[i - 1]); // Copiar cadenas correctamente
-        }
-
-        return false; // este false significa que el valor esta bien
-    }
-    else
-    {
-        strcpy(vTime[0], "Failed");
-        Serial.println("Array actualizado:");
-        for (int i = 0; i < NUM_VALORES; i++)
-        {
-            Serial.print(vTime[i]);
-        }
-
-        return true;
-    }
-}
-
-void ejecutarTime()
-{
-    if (pruebaTime()) // si es verdadero hay un error mostrandome el valor de error
-    {
-        String nuevaHora = getDateHora();
-        myLog("Error", "functions.hpp", "ejecutarTime()", "Error con adquirir el valor de la hora:");
-        Serial.println(nuevaHora);
     }
 }
 
@@ -1042,13 +981,87 @@ void ejecutarLm35()
     }
 }
 
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+
+void mostrarValoresTime()
+{
+    Serial.printf("Valores de tiempo: ");
+    for (int i = 0; i < NUM_VALORES; i++)
+    {
+
+        Serial.print(vTime[i]);
+    }
+    /*for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
+    {
+        vTime[i][6] = vTime[i - 1][6];
+    }*/
+    Serial.printf("\n");
+}
+
+bool pruebaTime()
+{
+    char nuevaHora[6]; // declare the array with enough size
+    char movera1[6];
+    getDateHora().toCharArray(nuevaHora, 6); // copy the string to the array
+    // la funcion convierte el string a un char de longitud 6
+    //  Serial.println(tempC);
+    if (rtcOk)
+    {
+        mostrarValoresTime(); // solo muestra los valores almacenados en el serial
+
+        strcpy(vTime[0], nuevaHora);
+
+        // mostrarValoresTime(); // solo muestra los valores almacenados en el serial
+        // Serial.print("La nueva hora es: ");
+        // Serial.println(vTime[0]);
+        strcpy(movera1, vTime[0]); //<----- FIXME: no hay valor en vTime por eso no lo pasa
+        // Serial.print("Valor movido: ");
+        // Serial.println(movera1); // TODO: primero hay que ver que se vea esto
+        // Serial.print("Valor esperado: ");
+        // Serial.println(vTime[0]); // TODO: primero hay que ver que se vea esto
+        //  ahora si hay que hacer el corrimento
+        for (int i = NUM_VALORES; i > 0; i--)
+        {
+            strcpy(vTime[i], vTime[i - 1]); // Copiar cadenas correctamente
+        }
+
+        return false; // este false significa que el valor esta bien
+    }
+    else
+    {
+        strcpy(vTime[0], "Failed");
+        Serial.println("Array actualizado:");
+        for (int i = 0; i < NUM_VALORES; i++)
+        {
+            Serial.print(vTime[i]);
+        }
+
+        return true;
+    }
+}
+
+void ejecutarTime()
+{
+    if (pruebaTime()) // si es verdadero hay un error mostrandome el valor de error
+    {
+        String nuevaHora = getDateHora();
+        myLog("Error", "functions.hpp", "ejecutarTime()", "Error con adquirir el valor de la hora:");
+        Serial.println(nuevaHora);
+    }
+}
+
 //----------------------------------------------------------------------------------------------
 // muestreo de temperatura y humedad
 //----------------------------------------------------------------------------------------------
 void muestra() // esta funcion toma una muestra de la temperatura y la humedad
 {
+    Serial.print("conteo grafica ");
     Serial.println(conteografica);
+    Serial.flush();
+    Serial.print("tiempo grafica ");
     Serial.println(tgrafica); // en algun momento se modifica este valor
+    Serial.flush();
 
     conteografica = 0;
     ejecutarTc();

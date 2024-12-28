@@ -158,7 +158,7 @@ bool CRELAY2;       // para que conmute en las fechas
 int conteografica = 0; // para que lleve el conteo del tiempo
 int maxTimeMin = 60;   // maximo tiempo en minutos que toma una muestra de los valores de temp y humedad
 int tgrafica;          // tiempo en minutos que indica cada cuantos minutos toma una muestra y guardar en minutos
-
+// FIXME: parece que esta invadiendo espacio de memoria
 char vTime[NUM_VALORES][7];    // Array para almacenar los valores de fecha con hasta 10 caracteres para que guarde espacio
 int vTemp[NUM_VALORES];        // Array para almacenar los valores de temperatura
 int vHum[NUM_VALORES];         // Array para almacenar los valores de humedad
