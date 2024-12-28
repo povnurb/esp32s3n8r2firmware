@@ -303,8 +303,16 @@ DHT dht(DHTPIN, DHT22);
 float Temperatura() // para la otra mandar un String
 {
     if (isnan(dht.readTemperature()))
-    {
-        tempC = 0;
+    {   
+        tempC = dht.readTemperature();
+        Serial.print(tempC);
+        //aqui hay que forzar por que el primer valor 
+        tempC = tempC;
+        if(tempC <= 0){
+            myLog("ERROR", "functions.hpp", "Temperatura()", "error en la medicion del Dht22");
+            tempC = dht.readTemperature();
+        }
+        myLog("ERROR", "functions.hpp", "Temperatura()", "error en la medicion del Dht22");
     }
     else
     {
