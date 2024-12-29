@@ -7,7 +7,7 @@ AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");           // access at ws://[esp ip]/ws
 AsyncEventSource events("/events"); // event source (Server-Sent events) escucha loseventos
 
-bool security = true; // si esta en true pide usuario y contraseña
+bool security = false; // si esta en true pide usuario y contraseña
 
 // validar usuario y contraseña
 void validateUserAndPasswordResponse(AsyncWebServerRequest *request)
@@ -225,6 +225,7 @@ void initServer()
         //{"/js/360.js", file_360_js, file_360_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/414.js", file_414_js, file_414_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/436.js", file_436_js, file_436_js_length, dataTypeJavaScripts, dataEncoding},
+        {"/js/487.js", file_487_js, file_487_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/491.js", file_491_js, file_491_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/573.js", file_573_js, file_573_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/599.js", file_599_js, file_599_js_length, dataTypeJavaScripts, dataEncoding},
@@ -232,7 +233,7 @@ void initServer()
         {"/js/649.js", file_649_js, file_649_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/671.js", file_671_js, file_671_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/724.js", file_724_js, file_724_js_length, dataTypeJavaScripts, dataEncoding},
-        {"/js/837.js", file_837_js, file_837_js_length, dataTypeJavaScripts, dataEncoding},
+        //{"/js/837.js", file_837_js, file_837_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/855.js", file_855_js, file_855_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/887.js", file_887_js, file_887_js_length, dataTypeJavaScripts, dataEncoding},
         {"/fonts/bootstrap-icons.woff", bootstrap_icons_woff, bootstrap_icons_woff_length, dataTypeWOFF, dataEncoding},

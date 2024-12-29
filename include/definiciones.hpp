@@ -155,7 +155,7 @@ bool CRELAY2;       // para que conmute en las fechas
 // Variables necesarias para registrar temperaturas y humedades por 48 hrs
 //------------------------------------------------------------------------------
 #define NUM_VALORES 24 // es el numero de muestras que quiero registrar esta no se mueve siempre sera 24 por que asi esta en la pagina web
-int conteografica = 0; // para que lleve el conteo del tiempo
+int conteografica = 1; // para que lleve el conteo del tiempo
 int maxTimeMin = 60;   // maximo tiempo en minutos que toma una muestra de los valores de temp y humedad
 int tgrafica;          // tiempo en minutos que indica cada cuantos minutos toma una muestra y guardar en minutos
 // FIXME: parece que esta invadiendo espacio de memoria

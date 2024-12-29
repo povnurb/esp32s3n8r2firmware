@@ -90,7 +90,7 @@ boolean settingsRead()
     mqtt_time_interval = jsonSettings["mqtt"]["mqtt_time_interval"] | 60; // 60 es el standard
     mqtt_status_send = jsonSettings["mqtt"]["mqtt_status_send"] | false;
     // Graficacion
-    tgrafica = jsonSettings["grafica"]["tgrafica"] | 1;
+    tgrafica = jsonSettings["grafica"]["tgrafica"] | 0;
     // DIMER
     dim = jsonSettings["dimmer"]["dim_value"] | 0;
     ajTmpDht22 = jsonSettings["ajTemp"]["ajTmpDht22"] | 0;
@@ -248,7 +248,7 @@ void settingsReset()
     mqtt_time_interval = 10000; // 60000 es el standard
     mqtt_status_send = true;
     // tiempo de muestra de la grafica en minutos
-    tgrafica = 1;
+    tgrafica = 0;
     // DIMER
     dim = 0;
     ajTmpDht22 = 0;

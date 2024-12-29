@@ -44,7 +44,7 @@ void startSTA()
     vTaskDelay(250);
     NeoLedPixel(0, 0, 0, 0); // apagamos
     vTaskDelay(250);
-    WiFi.mode(WIFI_STA); // TODO: verificar si cambio todos lo WIFI_STA a WIFI_AP_STA en tareas.hpp y en wifi.hpp
+    WiFi.mode(WIFI_AP_STA); // TODO: verificar si cambio todos lo WIFI_STA a WIFI_AP_STA en tareas.hpp y en wifi.hpp
     myLog("INFO", "wifi.hpp", "startSTA()", "Modo Estación (STA) ...");
     wifi_change = true;
 
@@ -86,7 +86,7 @@ void startSTA()
         // pestañep del NeoPixel
         blinkRandomNeoPixel(100, 1000, "amarillo"); // TODO: no hay parpadeo por que no hay un ciclo de repetición
         IpMqtt = ipToStr(WiFi.localIP());           // variable que se puede mandar por MQTT o WEBSOCKET
-        wifi_app = WIFI_STA;
+        wifi_app = WIFI_AP_STA;
         modoSta = true; // manda informacion del estado al OLED
     }
     else
@@ -123,7 +123,7 @@ void wifiSetup()
         myLog("INFO", "wifi.hpp", "wifiSetup()", "WiFi en modo Punto de Acceso (AP)");
     }
     // iniciar el MDNS
-    if (wifi_app = WIFI_STA || wifi_app == WIFI_AP)
+    if (wifi_app = WIFI_AP_STA || wifi_app == WIFI_AP)
     {
         if (MDNS.begin(esp_hostname))
         {

@@ -12,7 +12,7 @@ void TaskWifiReconnect(void *pvParameters)
     while (true)
     {
         vTaskDelay(10 / portTICK_PERIOD_MS);
-        if (wifi_app == WIFI_STA) // TODO: o WIFI_AP_STA en tareas.hpp y en wifi.hpp
+        if (wifi_app == WIFI_AP_STA) // TODO: o WIFI_AP_STA en tareas.hpp y en wifi.hpp
         {
             wifiSTALoop();
         }
@@ -30,7 +30,7 @@ void TaskMQTTReconnect(void *pvParameters)
     while (true)
     {
         vTaskDelay(10 / portTICK_PERIOD_MS);
-        if (WiFi.status() == WL_CONNECTED && (wifi_app == WIFI_STA))
+        if (WiFi.status() == WL_CONNECTED && (wifi_app == WIFI_AP_STA || wifi_app == WIFI_STA))
         {
             if (mqtt_server != 0)
             {
@@ -167,8 +167,8 @@ void TaskTimeGrafica(void *pvParameters)
     while (1)
     {
         muestra();
-        // vTaskDelay(2000 / portTICK_PERIOD_MS); // para que de 2 segundo
-        vTaskDelay(600000 / portTICK_PERIOD_MS); // para 10 minuto portTICK_PERIOD_MS
+        vTaskDelay(60000 / portTICK_PERIOD_MS); // para que de 1 min
+        //vTaskDelay(600000 / portTICK_PERIOD_MS); // para 10 minuto portTICK_PERIOD_MS
     }
 }
 

@@ -779,7 +779,7 @@ bool pruebaTc()
         vTemp[0] = nuevaTemperatura;
         // mostrarValoresTemp();
         Serial.flush();
-        for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
+        for (int i = NUM_VALORES - 1; i >= 1; i--) // este hace el corrimiento
         {
             vTemp[i] = vTemp[i - 1];
         }
@@ -822,7 +822,7 @@ bool pruebaHum()
         // Almacenar la nueva temperatura en el array y actualizar el índice
         vHum[0] = nuevaHum;
         // mostrarValoresHum();
-        for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
+        for (int i = NUM_VALORES - 1; i >= 1; i--) // este hace el corrimiento
         {
             vHum[i] = vHum[i - 1];
         }
@@ -868,7 +868,7 @@ bool pruebaTmp1()
         // Almacenar la nueva temperatura en el array y actualizar el índice
         vSensorPozo1[0] = nuevaTemperatura;
         // mostrarValoresTmp1();
-        for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
+        for (int i = NUM_VALORES - 1; i >= 1; i--) // este hace el corrimiento
         {
             vSensorPozo1[i] = vSensorPozo1[i - 1];
         }
@@ -914,7 +914,7 @@ bool pruebaTmp2()
         // Almacenar la nueva temperatura en el array y actualizar el índice
         vSensorPozo2[0] = nuevaTemperatura;
         // mostrarValoresTmp2();
-        for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
+        for (int i = NUM_VALORES - 1; i >= 1; i--) // este hace el corrimiento
         {
             vSensorPozo2[i] = vSensorPozo2[i - 1];
         }
@@ -960,7 +960,7 @@ bool pruebaLm35()
         // Almacenar la nueva temperatura en el array y actualizar el índice
         vSLm35[0] = nuevaTemperatura;
         // mostrarValoresLm35();
-        for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
+        for (int i = NUM_VALORES - 1; i >= 1; i--) // este hace el corrimiento
         {
             vSLm35[i] = vSLm35[i - 1];
         }
@@ -992,10 +992,7 @@ void mostrarValoresTime()
 
         Serial.print(vTime[i]);
     }
-    /*for (int i = NUM_VALORES; i >= 1; i--) // este hace el corrimiento
-    {
-        vTime[i][6] = vTime[i - 1][6];
-    }*/
+
     Serial.printf("\n");
 }
 
@@ -1021,11 +1018,14 @@ bool pruebaTime()
         // Serial.print("Valor esperado: ");
         // Serial.println(vTime[0]); // TODO: primero hay que ver que se vea esto
         //  ahora si hay que hacer el corrimento
-        for (int i = NUM_VALORES; i > 0; i--)
+        // for (int i = NUM_VALORES; i > 0; i--)    //esto provocaba un error en las variables
+        for (int i = NUM_VALORES - 1; i >= 1; i--)
         {
-            strcpy(vTime[i], vTime[i - 1]); // Copiar cadenas correctamente
+            strcpy(vTime[i], vTime[i - 1]); // si lo hago asi invade a otros espacios de memoria
+            // strncpy(vTime[i], vTime[i - 1], sizeof(vTime[i]) - 1); // Copiar cadenas correctamente
+            // vTime[i][sizeof(vTime[i]) - 1] = '\0';
         }
-
+        // parece que se pasa
         return false; // este false significa que el valor esta bien
     }
     else
@@ -1056,24 +1056,25 @@ void ejecutarTime()
 //----------------------------------------------------------------------------------------------
 void muestra() // esta funcion toma una muestra de la temperatura y la humedad
 {
-    Serial.print("conteo grafica ");
-    Serial.println(conteografica);
-    Serial.flush();
-    Serial.print("tiempo grafica ");
-    Serial.println(tgrafica); // en algun momento se modifica este valor
-    Serial.flush();
-
-    conteografica = 0;
-    ejecutarTc();
-    ejecutarHum();
-    ejecutarTmp1();
-    ejecutarTmp2();
-    ejecutarLm35();
-    ejecutarTime();
-    if ((1 < tempC < 99) && (1 < humedad < 99) && (1 < temp1 < 99) && (1 < temp2 < 99) && (1 < templm35 < 150))
+    if (conteografica >= tgrafica)
     {
-        dataGraficasSave(); //
-        timeSave();         // salvamos los valores provicionales en la spiffstime
+        conteografica = 1;
+        // tgrafica
+        ejecutarTc();
+        ejecutarHum();
+        ejecutarTmp1();
+        ejecutarTmp2();
+        ejecutarLm35();
+        ejecutarTime();
+        if ((1 < tempC < 99) && (1 < humedad < 99) && (1 < temp1 < 99) && (1 < temp2 < 99) && (1 < templm35 < 150))
+        {
+            dataGraficasSave(); //
+            timeSave();         // salvamos los valores provicionales en la spiffstime
+        }
+    }
+    else
+    {
+        conteografica++;
     }
 }
 
