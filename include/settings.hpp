@@ -90,7 +90,7 @@ boolean settingsRead()
     mqtt_time_interval = jsonSettings["mqtt"]["mqtt_time_interval"] | 60; // 60 es el standard
     mqtt_status_send = jsonSettings["mqtt"]["mqtt_status_send"] | false;
     // Graficacion
-    tgrafica = jsonSettings["grafica"]["tgrafica"] | 0;
+    tgrafica = jsonSettings["grafica"]["tgrafica"] | 1;
     // DIMER
     dim = jsonSettings["dimmer"]["dim_value"] | 0;
     ajTmpDht22 = jsonSettings["ajTemp"]["ajTmpDht22"] | 0;
@@ -101,28 +101,28 @@ boolean settingsRead()
     //  ZONA DE ALARMAS
     // ---------------------------------------------------------
     ALARM_LOGICA1 = jsonSettings["alarmas"]["ALARM_LOGICA1"].as<bool>();
-    // ALARM_RECONOCIDA1 = jsonSettings["alarmas"]["ALARM_RECONOCIDA1"].as<bool>();
+    ALARM_RECONOCIDA1 = jsonSettings["alarmas"]["ALARM_RECONOCIDA1"].as<bool>();
     ALARM_NAME1 = jsonSettings["alarmas"]["ALARM_NAME1"].as<String>();
     ALARM_LOGICA2 = jsonSettings["alarmas"]["ALARM_LOGICA2"].as<bool>();
-    // ALARM_RECONOCIDA2 = jsonSettings["alarmas"]["ALARM_RECONOCIDA2"].as<bool>();
+    ALARM_RECONOCIDA2 = jsonSettings["alarmas"]["ALARM_RECONOCIDA2"].as<bool>();
     ALARM_NAME2 = jsonSettings["alarmas"]["ALARM_NAME2"].as<String>();
     ALARM_LOGICA3 = jsonSettings["alarmas"]["ALARM_LOGICA3"].as<bool>();
-    // ALARM_RECONOCIDA3 = jsonSettings["alarmas"]["ALARM_RECONOCIDA3"].as<bool>();
+    ALARM_RECONOCIDA3 = jsonSettings["alarmas"]["ALARM_RECONOCIDA3"].as<bool>();
     ALARM_NAME3 = jsonSettings["alarmas"]["ALARM_NAME3"].as<String>();
     ALARM_LOGICA4 = jsonSettings["alarmas"]["ALARM_LOGICA4"].as<bool>();
-    // ALARM_RECONOCIDA4 = jsonSettings["alarmas"]["ALARM_RECONOCIDA4"].as<bool>();
+    ALARM_RECONOCIDA4 = jsonSettings["alarmas"]["ALARM_RECONOCIDA4"].as<bool>();
     ALARM_NAME4 = jsonSettings["alarmas"]["ALARM_NAME4"].as<String>();
     ALARM_LOGICA5 = jsonSettings["alarmas"]["ALARM_LOGICA5"].as<bool>();
-    // ALARM_RECONOCIDA5 = jsonSettings["alarmas"]["ALARM_RECONOCIDA5"].as<bool>();
+    ALARM_RECONOCIDA5 = jsonSettings["alarmas"]["ALARM_RECONOCIDA5"].as<bool>();
     ALARM_NAME5 = jsonSettings["alarmas"]["ALARM_NAME5"].as<String>();
     ALARM_LOGICA6 = jsonSettings["alarmas"]["ALARM_LOGICA6"].as<bool>();
-    // ALARM_RECONOCIDA6 = jsonSettings["alarmas"]["ALARM_RECONOCIDA6"].as<bool>();
+    ALARM_RECONOCIDA6 = jsonSettings["alarmas"]["ALARM_RECONOCIDA6"].as<bool>();
     ALARM_NAME6 = jsonSettings["alarmas"]["ALARM_NAME6"].as<String>();
     ALARM_LOGICA7 = jsonSettings["alarmas"]["ALARM_LOGICA7"].as<bool>();
-    // ALARM_RECONOCIDA7 = jsonSettings["alarmas"]["ALARM_RECONOCIDA7"].as<bool>();
+    ALARM_RECONOCIDA7 = jsonSettings["alarmas"]["ALARM_RECONOCIDA7"].as<bool>();
     ALARM_NAME7 = jsonSettings["alarmas"]["ALARM_NAME7"].as<String>();
     ALARM_LOGICA8 = jsonSettings["alarmas"]["ALARM_LOGICA8"].as<bool>();
-    // ALARM_RECONOCIDA8 = jsonSettings["alarmas"]["ALARM_RECONOCIDA8"].as<bool>();
+    ALARM_RECONOCIDA8 = jsonSettings["alarmas"]["ALARM_RECONOCIDA8"].as<bool>();
     ALARM_NAME8 = jsonSettings["alarmas"]["ALARM_NAME8"].as<String>();
     // Zona RELAYS
     strlcpy(R_NAME1, jsonSettings["relay"]["R_NAME1"], sizeof(R_NAME1)); // variables de tipo char primero se define la variable (R_NAME1)
@@ -248,7 +248,7 @@ void settingsReset()
     mqtt_time_interval = 10000; // 60000 es el standard
     mqtt_status_send = true;
     // tiempo de muestra de la grafica en minutos
-    tgrafica = 0;
+    tgrafica = 1;
     // DIMER
     dim = 0;
     ajTmpDht22 = 0;
@@ -259,28 +259,28 @@ void settingsReset()
     //  ZONA DE ALARMAS true = se activa el estatus con tierra y se pone en false
     // ---------------------------------------------------------
     ALARM_LOGICA1 = true;
-    // ALARM_RECONOCIDA1 = true;
+    ALARM_RECONOCIDA1 = true;
     ALARM_NAME1 = "ALARMA IO35";
     ALARM_LOGICA2 = true;
-    // ALARM_RECONOCIDA2 = true;
+    ALARM_RECONOCIDA2 = true;
     ALARM_NAME2 = "ALARMA IO36";
     ALARM_LOGICA3 = true;
-    // ALARM_RECONOCIDA3 = true;
+    ALARM_RECONOCIDA3 = true;
     ALARM_NAME3 = "ALARMA IO37";
     ALARM_LOGICA4 = true;
-    // ALARM_RECONOCIDA4 = true;
+    ALARM_RECONOCIDA4 = true;
     ALARM_NAME4 = "ALARMA IO38";
     ALARM_LOGICA5 = true;
-    // ALARM_RECONOCIDA5 = true;
+    ALARM_RECONOCIDA5 = true;
     ALARM_NAME5 = "ALARMA IO39";
     ALARM_LOGICA6 = true;
-    // ALARM_RECONOCIDA6 = true;
+    ALARM_RECONOCIDA6 = true;
     ALARM_NAME6 = "ALARMA IO40";
     ALARM_LOGICA7 = true;
-    // ALARM_RECONOCIDA7 = true;
+    ALARM_RECONOCIDA7 = true;
     ALARM_NAME7 = "ALARMA IO41";
     ALARM_LOGICA8 = true;
-    // ALARM_RECONOCIDA8 = true;
+    ALARM_RECONOCIDA8 = true;
     ALARM_NAME8 = "ALARMA IO42";
     /********************************************************************************
      * variables para los actuadores RELAYS                                          *
@@ -333,12 +333,12 @@ void settingsReset()
     DOMINGO1B = false;
     DOMINGO2A = false;
     DOMINGO2B = false;
-    FECHAON1 = "";       // muestra la FECHA de encendido
-    FECHAON2 = "";       // muestra la FECHA de encendido
-    FECHAOFF1 = "";      // muestra la FECHA de apagado
-    FECHAOFF2 = "";      // muestra la FECHA de apagado
-    programado1 = false; // sin uso por el momento
-    programado2 = false; // sin uso por el momento
+    FECHAON1 = "";      // muestra la FECHA de encendido
+    FECHAON2 = "";      // muestra la FECHA de encendido
+    FECHAOFF1 = "";     // muestra la FECHA de apagado
+    FECHAOFF2 = "";     // muestra la FECHA de apagado
+    programado1 = true; // programado para enviar el cambio por telegram
+    programado2 = true; // programado para enviar el cambio por telegram
     //  -------------------------------------------------------------------
     //  Time settings.json
     //  -------------------------------------------------------------------
@@ -481,28 +481,28 @@ boolean settingsSave()
     // ---------------------------------------------------------
     JsonObject alarmasObj = jsonSettings["alarmas"].to<JsonObject>();
     alarmasObj["ALARM_LOGICA1"] = ALARM_LOGICA1;
-    // alarmasObj["ALARM_RECONOCIDA1"] = ALARM_RECONOCIDA1;
+    alarmasObj["ALARM_RECONOCIDA1"] = ALARM_RECONOCIDA1;
     alarmasObj["ALARM_NAME1"] = ALARM_NAME1;
     alarmasObj["ALARM_LOGICA2"] = ALARM_LOGICA2;
-    // alarmasObj["ALARM_RECONOCIDA2"] = ALARM_RECONOCIDA2;
+    alarmasObj["ALARM_RECONOCIDA2"] = ALARM_RECONOCIDA2;
     alarmasObj["ALARM_NAME2"] = ALARM_NAME2;
     alarmasObj["ALARM_LOGICA3"] = ALARM_LOGICA3;
-    // alarmasObj["ALARM_RECONOCIDA3"] = ALARM_RECONOCIDA3;
+    alarmasObj["ALARM_RECONOCIDA3"] = ALARM_RECONOCIDA3;
     alarmasObj["ALARM_NAME3"] = ALARM_NAME3;
     alarmasObj["ALARM_LOGICA4"] = ALARM_LOGICA4;
-    // alarmasObj["ALARM_RECONOCIDA4"] = ALARM_RECONOCIDA4;
+    alarmasObj["ALARM_RECONOCIDA4"] = ALARM_RECONOCIDA4;
     alarmasObj["ALARM_NAME4"] = ALARM_NAME4;
     alarmasObj["ALARM_LOGICA5"] = ALARM_LOGICA5;
-    // alarmasObj["ALARM_RECONOCIDA5"] = ALARM_RECONOCIDA5;
+    alarmasObj["ALARM_RECONOCIDA5"] = ALARM_RECONOCIDA5;
     alarmasObj["ALARM_NAME5"] = ALARM_NAME5;
     alarmasObj["ALARM_LOGICA6"] = ALARM_LOGICA6;
-    // alarmasObj["ALARM_RECONOCIDA6"] = ALARM_RECONOCIDA6;
+    alarmasObj["ALARM_RECONOCIDA6"] = ALARM_RECONOCIDA6;
     alarmasObj["ALARM_NAME6"] = ALARM_NAME6;
     alarmasObj["ALARM_LOGICA7"] = ALARM_LOGICA7;
-    // alarmasObj["ALARM_RECONOCIDA7"] = ALARM_RECONOCIDA7;
+    alarmasObj["ALARM_RECONOCIDA7"] = ALARM_RECONOCIDA7;
     alarmasObj["ALARM_NAME7"] = ALARM_NAME7;
     alarmasObj["ALARM_LOGICA8"] = ALARM_LOGICA8;
-    // alarmasObj["ALARM_RECONOCIDA8"] = ALARM_RECONOCIDA8;
+    alarmasObj["ALARM_RECONOCIDA8"] = ALARM_RECONOCIDA8;
     alarmasObj["ALARM_NAME8"] = ALARM_NAME8;
     // ---------------------------------------------------------------------------------
     // TIME settings.json

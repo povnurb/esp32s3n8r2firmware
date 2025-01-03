@@ -5,7 +5,7 @@ String gerencia;
 String ciudad;                    // de 6 digitos minuscula en settingsreset()
 String central;                   // de 6 digitos minuscula
 String sala;                      // de 7 digitos minuscula
-String DeviceName = "HGO-PTTI-2"; // es el mdns que se le desa poner
+String DeviceName = "hgo-ptti-2"; // es el mdns que se le desa poner
 String Administrador = "admin";
 String Contra = "personal"; // tanto para modo AP
 // Acceso WiFi

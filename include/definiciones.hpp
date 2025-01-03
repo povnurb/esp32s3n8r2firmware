@@ -146,10 +146,10 @@ float tempPozoC, tempPozof; // centigrados y fahrenheit
 //---------------------------------------------------
 // Zona Relay originales
 //-------------------------------------------------
-bool RELAY1_STATUS; // estado del relay1
-bool CRELAY1;       // para que conmute en las fechas
-bool RELAY2_STATUS; // estado del relay2
-bool CRELAY2;       // para que conmute en las fechas
+bool RELAY1_STATUS;   // estado del relay1
+bool CRELAY1 = false; // para que conmute en las fechas
+bool RELAY2_STATUS;   // estado del relay2
+bool CRELAY2 = false; // para que conmute en las fechas
 //------------------------------------------------
 // Zona de la grafica
 // Variables necesarias para registrar temperaturas y humedades por 48 hrs
@@ -199,7 +199,7 @@ bool ALARM_STATUS1, ALARM_STATUS2, ALARM_STATUS3, ALARM_STATUS4, ALARM_STATUS5, 
 bool ALARM_RECONOCIDA1, ALARM_RECONOCIDA2, ALARM_RECONOCIDA3, ALARM_RECONOCIDA4, ALARM_RECONOCIDA5, ALARM_RECONOCIDA6, ALARM_RECONOCIDA7, ALARM_RECONOCIDA8;
 bool ALARM_STATUS[NUM_ALARMS];
 bool reconocidas[NUM_ALARMS] = {ALARM_RECONOCIDA1, ALARM_RECONOCIDA2, ALARM_RECONOCIDA3, ALARM_RECONOCIDA4, ALARM_RECONOCIDA5, ALARM_RECONOCIDA6, ALARM_RECONOCIDA7, ALARM_RECONOCIDA8};
-// guardar la logica, el pin y el nombre en el settings
+//  guardar la logica, el pin y el nombre en el settings
 bool ALARM_LOGICA1, ALARM_LOGICA2, ALARM_LOGICA3, ALARM_LOGICA4, ALARM_LOGICA5, ALARM_LOGICA6, ALARM_LOGICA7, ALARM_LOGICA8;
 bool logicas[NUM_ALARMS];
 String ALARM_NAME1, ALARM_NAME2, ALARM_NAME3, ALARM_NAME4, ALARM_NAME5, ALARM_NAME6, ALARM_NAME7, ALARM_NAME8;
@@ -304,7 +304,8 @@ String device_fecha; // muestra la fecha actual del dispositivo a la api
 #define SCREEN_WIDTH 128 // Ancho   128 o 128
 #define SCREEN_HEIGHT 32 // Alto     32 0 64
 
-Adafruit_SSD1306 OLED(SCREEN_WIDTH, SCREEN_HEIGHT);
+// Adafruit_SSD1306 OLED(SCREEN_WIDTH, SCREEN_HEIGHT);
+Adafruit_SSD1306 OLED = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire);
 
 // -----------------------------------------------------------------------
 // Activacion de Alarmas de manera local atravez de la switch (GPIO 13) SWITCHTESTALARM
@@ -331,3 +332,12 @@ String nuevaFecha;
 String alarma; // alamacena momentaneamente el nombre de la alarma
 String fechas; // alamacena en global momentaneamente fechas para el archivo de alarmas
 bool status;   // almacena momentaneamente el estado de la alarma
+
+//---------------------------------------------------------------
+//----------------------------------------------------------------------------
+// maneja los relay desde la api y verificara el estado por minuto
+// Funcion para operar los Relays de forma Global -> API
+//----------------------------------------------------------------------------
+// releTime estas variables son para indicar que no esta programado el y evitan que vuelvan a programarse
+bool releprog1 = false;
+bool releprog2 = false;

@@ -22,6 +22,7 @@
 #include <Adafruit_I2CDevice.h> //Para la comunicaciones serial by Adafruit
 #include <Adafruit_GFX.h>       // para la pantalla de lcd de gráficos (cuadrados circulos toda una especializacion)
 #include <Adafruit_SSD1306.h>   // para la pantalla de lcd by Adafruit
+#include <Ticker.h>             //para los timer de los relays
 
 // Archivos *.hpp Fragmentación del codigo
 #include "definiciones.hpp"

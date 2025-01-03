@@ -529,7 +529,6 @@ bool statusAlarm8()
 void contadorAlarmas()
 {
     int pines[NUM_ALARMS] = {ALARMPIN1, ALARMPIN2, ALARMPIN3, ALARMPIN4, ALARMPIN5, ALARMPIN6, ALARMPIN7, ALARMPIN8};
-    int reconocida[NUM_ALARMS] = {ALARM_RECONOCIDA1, ALARM_RECONOCIDA2, ALARM_RECONOCIDA3, ALARM_RECONOCIDA4, ALARM_RECONOCIDA5, ALARM_RECONOCIDA6, ALARM_LOGICA7, ALARM_RECONOCIDA8};
     logicas[0] = ALARM_LOGICA1;
     logicas[1] = ALARM_LOGICA2;
     logicas[2] = ALARM_LOGICA3;
@@ -538,7 +537,7 @@ void contadorAlarmas()
     logicas[5] = ALARM_LOGICA6;
     logicas[6] = ALARM_LOGICA7;
     logicas[7] = ALARM_LOGICA8;
-    // int cont[NUM_ALARMS] = {ALARM_CONT1, ALARM_CONT2, ALARM_CONT3, ALARM_CONT4, ALARM_CONT5, ALARM_CONT6, ALARM_CONT7, ALARM_CONT8};
+    bool reconocer[NUM_ALARMS] = {ALARM_RECONOCIDA1, ALARM_RECONOCIDA2, ALARM_RECONOCIDA3, ALARM_RECONOCIDA4, ALARM_RECONOCIDA5, ALARM_RECONOCIDA6, ALARM_RECONOCIDA7, ALARM_RECONOCIDA8};
     String names[NUM_ALARMS] = {ALARM_NAME1, ALARM_NAME2, ALARM_NAME3, ALARM_NAME4, ALARM_NAME5, ALARM_NAME6, ALARM_NAME7, ALARM_NAME8};
     for (int i = 0; i < NUM_ALARMS; i++)
     {
@@ -549,36 +548,48 @@ void contadorAlarmas()
             {
                 cont[i]++;
                 fechaAct[i] = getDateTime();
-                reconocida[i] = false;
                 fechaClear[i] = "";
                 cambiar[i] = true;
-                // TODO:
+                // TODO: reconocer es para registrar la alarma
+                if(reconocer[i]){
+
                 alarmaPresente(names[i], fechaAct[i], true);
+                }
             }
             else if (!digitalRead(pines[i]) && cambiar[i])
             {
                 cambiar[i] = false;
                 fechaClear[i] = getDateTime();
+                // TODO:
+                if(reconocer[i]){
+
                 alarmaPresente(names[i], fechaAct[i], false);
+                }
             }
         }
         else
         { // si la logica es invertida
-            // ALARM_STATUS[i] = !digitalRead(pines[i]);
             if (!digitalRead(pines[i]) && !cambiar[i])
             {
                 cont[i]++;
                 fechaAct[i] = getDateTime();
-                reconocida[i] = false;
                 fechaClear[i] = "";
                 cambiar[i] = true;
+                // TODO:
+                if(reconocer[i]){
+
                 alarmaPresente(names[i], fechaAct[i], true);
+                }
             }
             else if (digitalRead(pines[i]) && cambiar[i])
             {
                 cambiar[i] = false;
                 fechaClear[i] = getDateTime();
+                // TODO:
+                if(reconocer[i]){
+
                 alarmaPresente(names[i], fechaClear[i], false);
+                }
             }
         }
         //}
@@ -591,15 +602,6 @@ void contadorAlarmas()
     ALARM_CONT6 = cont[5];
     ALARM_CONT7 = cont[6];
     ALARM_CONT8 = cont[7];
-    ALARM_RECONOCIDA1 = reconocida[0]; // Solo se pondra en true por la API
-    ALARM_RECONOCIDA2 = reconocida[1];
-    ALARM_RECONOCIDA3 = reconocida[2];
-    ALARM_RECONOCIDA4 = reconocida[3];
-    ALARM_RECONOCIDA5 = reconocida[4];
-    ALARM_RECONOCIDA6 = reconocida[5];
-    ALARM_RECONOCIDA7 = reconocida[6];
-    ALARM_RECONOCIDA8 = reconocida[7];
-    bool reconocidas[NUM_ALARMS] = {ALARM_RECONOCIDA1, ALARM_RECONOCIDA2, ALARM_RECONOCIDA3, ALARM_RECONOCIDA4, ALARM_RECONOCIDA5, ALARM_RECONOCIDA6, ALARM_RECONOCIDA7, ALARM_RECONOCIDA8};
     ALARM_TIMEON1 = fechaAct[0];
     ALARM_TIMEON2 = fechaAct[1];
     ALARM_TIMEON3 = fechaAct[2];
@@ -711,29 +713,45 @@ void activarAlarma()
 void fechaRlay()
 {
 
-    if (digitalRead(RELAY1) && !CRELAY1)
+    if (RELAY1_STATUS && !CRELAY1)
     {
 
-        FECHAON1 = getDateTime();
+        FECHAON1 = fechaActual(); // por el formato
         FECHAOFF1 = "";
         CRELAY1 = true;
+        if (programado1)
+        {
+            enviarMensaje("El relevador " + String(R_NAME1) + " de la sala " + sala + " esta activado");
+        }
     }
-    else if (!digitalRead(RELAY1) && CRELAY1)
+    else if (!RELAY1_STATUS && CRELAY1)
     {
         CRELAY1 = false;
-        FECHAOFF1 = getDateTime();
+        FECHAOFF1 = fechaActual(); // por el formato
+        if (programado1)
+        {
+            enviarMensaje("El relevador " + String(R_NAME1) + " de la sala " + sala + " esta desactivado");
+        }
     }
-    if (digitalRead(RELAY2) && !CRELAY2)
+    if (RELAY2_STATUS && !CRELAY2)
     {
 
-        FECHAON2 = getDateTime();
+        FECHAON2 = fechaActual(); // por el formato
         FECHAOFF2 = "";
         CRELAY2 = true;
+        if (programado2)
+        {
+            enviarMensaje("El relevador " + String(R_NAME2) + " de la sala " + sala + " esta activado");
+        }
     }
-    else if (!digitalRead(RELAY2) && CRELAY2)
+    else if (!RELAY2_STATUS && CRELAY2)
     {
         CRELAY2 = false;
-        FECHAOFF2 = getDateTime();
+        FECHAOFF2 = fechaActual(); // por el formato
+        if (programado2)
+        {
+            enviarMensaje("El relevador " + String(R_NAME2) + " de la sala " + sala + " esta desactivado");
+        }
     }
 };
 
@@ -741,7 +759,7 @@ void fechaRlay()
 void alarmasReset()
 {
     alarma = "El historial de alarmas inicia";
-    fechas = getDateTime();
+    fechas = getDateTime(); // no requiere formato
     status = true;
     myLog("INFO", "alarmas.hpp", "alarmasReset()", "creando archivo de alarmas");
 }

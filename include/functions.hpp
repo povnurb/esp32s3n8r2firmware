@@ -1,7 +1,10 @@
+Ticker timerRelay1; // para el manejo del relay1
+Ticker timerRelay2; // para el manejo del relay2
 // definir funciones
 bool dataGraficasSave();
 bool timeSave();
 void ejecutarTime();
+
 bool validateNestedKeys(JsonObject &obj, const char *keys[], size_t keysSize);
 // realizar un log en el puerto serial
 void myLog(const char *type, const char *arch, const char *func, const char *msg)
@@ -1085,7 +1088,7 @@ void setupPinBtnes()
     pinMode(ACTFECHA, INPUT_PULLUP); // GPIO 20 seteo de la fecha
 }
 //------------------------------INTERRUPCIONES-------------------------------------------------
-// Funcion para activar y desactivar los relevadores de manera local
+// Funcion para activar y desactivar los relevadores de manera local con un boton supongo
 //-------------------------------------------------------------------------------
 void actRele()
 {
@@ -1094,7 +1097,7 @@ void actRele()
     {
         togle1 = !togle1;
         digitalWrite(RELAY1, true);
-        digitalWrite(TMOSFET1, true); // TODO: quitar
+        // digitalWrite(TMOSFET1, true); // TODO: quitar
         Serial.println("activar relay1 ");
         RELAY1_STATUS = true;
     }
@@ -1102,8 +1105,9 @@ void actRele()
     {
         togle1 = !togle1;
         digitalWrite(RELAY1, false);
-        digitalWrite(TMOSFET1, false); // TODO: quitar
+        // digitalWrite(TMOSFET1, false); // TODO: quitar
         Serial.println("desactivar relay1 ");
+
         RELAY1_STATUS = false;
     }
     else
@@ -1118,6 +1122,7 @@ void actRele()
         digitalWrite(RELAY2, true);
         digitalWrite(TMOSFET2, true); // TODO: check
         Serial.println("activar relay2 ");
+
         RELAY2_STATUS = true;
     }
     else if (digitalRead(RELAY2) && !digitalRead(ACTRELE2) && togle2)
@@ -1126,6 +1131,7 @@ void actRele()
         digitalWrite(RELAY2, false);
         digitalWrite(TMOSFET2, false); // TODO:
         Serial.println("desactivar relay2 ");
+
         RELAY2_STATUS = false;
     }
     else
@@ -1155,7 +1161,7 @@ String releTime()
 //----------------------------------------------------------------
 // funcion que indica cuando deben encender y que horario los relays
 //----------------------------------------------------------------
-void programaRelays() // TODO:
+void programaRelays() // TODO: verificar que haga lo que segun se programó
 {
     int weekDay = tm.dayOfTheWeek();
     // 1A
@@ -1664,4 +1670,48 @@ void mostrar()
         OLED.println(" %");
         OLED.display();
     }
+}
+
+//----------------------------------------------------------------------------
+// maneja los relay desde la api y verificara el estado por minuto
+// Funcion para operar los Relays de forma Global -> API
+//----------------------------------------------------------------------------
+
+void offRelay1() // checar si aqui tambien para los mosfet
+{
+    R_TIMERON1 = false; // indica que se va a encender por un determinado tiempo
+    digitalWrite(RELAY1, false);
+    RELAY1_STATUS = false;
+    timerRelay1.detach();
+    releprog1 = false;
+}
+void offRelay2()
+{
+    R_TIMERON2 = false;
+    digitalWrite(RELAY2, false);
+    RELAY2_STATUS = false;
+    timerRelay2.detach(); // detiene la ejecucion
+    releprog2 = false;
+}
+
+// funcion que enciende los relevadores por un tiempo
+void ctrlRelays()
+{
+    if (R_TIMERON1 && !releprog1)
+    {
+        timerRelay1.attach(R_TIMER1, offRelay1);
+        RELAY1_STATUS = true;
+        releprog1 = true;
+    }
+    if (R_TIMERON2 && !releprog2)
+    {
+        timerRelay2.attach(R_TIMER2, offRelay2);
+        RELAY2_STATUS = true;
+        releprog2 = true;
+    }
+    // para que se ejecute la accion de encender o apargar
+
+    digitalWrite(RELAY1, RELAY1_STATUS);
+
+    digitalWrite(RELAY2, RELAY2_STATUS);
 }

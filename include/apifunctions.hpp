@@ -384,16 +384,10 @@ String apiGetAlarms()
     ALARM_STATUS[5] = ALARM_STATUS6;
     ALARM_STATUS[6] = ALARM_STATUS7;
     ALARM_STATUS[7] = ALARM_STATUS8;
-    // bool reconocidas[NUM_ALARMS] = {ALARM_RECONOCIDA1, ALARM_RECONOCIDA2, ALARM_RECONOCIDA3, ALARM_RECONOCIDA4, ALARM_RECONOCIDA5, ALARM_RECONOCIDA6, ALARM_RECONOCIDA7, ALARM_RECONOCIDA8};
+    bool reconocidas[NUM_ALARMS] = {ALARM_RECONOCIDA1, ALARM_RECONOCIDA2, ALARM_RECONOCIDA3, ALARM_RECONOCIDA4, ALARM_RECONOCIDA5, ALARM_RECONOCIDA6, ALARM_RECONOCIDA7, ALARM_RECONOCIDA8};
     String response = "";
     JsonDocument jsonDoc;
-    // jsonDoc["rssiStatus"] = WiFi.status() == WL_CONNECTED ? WiFi.RSSI() : 0;
-    // jsonDoc["wifiQuality"] = WiFi.status() == WL_CONNECTED ? getRSSIasQuality(WiFi.RSSI()) : 0;
-    // jsonDoc["wifiStatus"] = WiFi.status() == WL_CONNECTED ? true : false;
-    // jsonDoc["mqttStatus"] = mqttClient.connected() ? true : false;
-    // jsonDoc["serial"] = DeviceID();
-    // jsonDoc["device"] = platform();
-    // jsonDoc["code"] = 1;
+
     jsonDoc["cantidad"] = NUM_ALARMS;
     jsonDoc["prueba_de_alarmas"] = prueba;
     // alarmas
@@ -534,7 +528,7 @@ String apiGetTemperaturas()
     return response;
 }
 
-// metodo POST RELAY apiPostRelays
+// metodo POST ALARMAS
 bool apiPostAlarms(const String &data)
 {
     JsonDocument doc;
@@ -554,34 +548,53 @@ bool apiPostAlarms(const String &data)
     {
         ALARM_NAME1 = doc["alarmas"][0]["name"].as<String>();
     }
+    ALARM_RECONOCIDA1 = doc["alarmas"][0]["reconocida"].as<boolean>();
     if (doc["alarmas"][1]["name"] && doc["alarmas"][1]["name"].as<String>().length() > 0)
     {
         ALARM_NAME2 = doc["alarmas"][1]["name"].as<String>();
     }
+    ALARM_RECONOCIDA2 = doc["alarmas"][1]["reconocida"].as<boolean>();
     if (doc["alarmas"][2]["name"] && doc["alarmas"][2]["name"].as<String>().length() > 0)
     {
         ALARM_NAME3 = doc["alarmas"][2]["name"].as<String>();
     }
+
+    ALARM_RECONOCIDA3 = doc["alarmas"][2]["reconocida"].as<boolean>();
+
     if (doc["alarmas"][3]["name"] && doc["alarmas"][3]["name"].as<String>().length() > 0)
     {
         ALARM_NAME4 = doc["alarmas"][3]["name"].as<String>();
     }
+
+    ALARM_RECONOCIDA4 = doc["alarmas"][3]["reconocida"].as<boolean>();
+
     if (doc["alarmas"][4]["name"] && doc["alarmas"][4]["name"].as<String>().length() > 0)
     {
         ALARM_NAME5 = doc["alarmas"][4]["name"].as<String>();
     }
+
+    ALARM_RECONOCIDA5 = doc["alarmas"][4]["reconocida"].as<boolean>();
+
     if (doc["alarmas"][5]["name"] && doc["alarmas"][5]["name"].as<String>().length() > 0)
     {
         ALARM_NAME6 = doc["alarmas"][5]["name"].as<String>();
     }
+
+    ALARM_RECONOCIDA6 = doc["alarmas"][5]["reconocida"].as<boolean>();
+
     if (doc["alarmas"][6]["name"] && doc["alarmas"][6]["name"].as<String>().length() > 0)
     {
         ALARM_NAME7 = doc["alarmas"][6]["name"].as<String>();
     }
+
+    ALARM_RECONOCIDA7 = doc["alarmas"][6]["reconocida"].as<boolean>();
+
     if (doc["alarmas"][7]["name"] && doc["alarmas"][7]["name"].as<String>().length() > 0)
     {
         ALARM_NAME8 = doc["alarmas"][7]["name"].as<String>();
     }
+
+    ALARM_RECONOCIDA8 = doc["alarmas"][7]["reconocida"].as<boolean>();
 
     // guardar la informacion
     return settingsSave();
@@ -627,7 +640,7 @@ bool apiPostRelay1(const String &data)
     {
         strlcpy(R_NAME1, doc["R_NAME1"].as<String>().c_str(), sizeof(R_NAME1));
     }
-    R_TIMERON1 = doc["TIMEONRELAY1"].as<bool>(); // si debe se encenderse por algun tiempo
+    R_TIMERON1 = doc["R_TIMERON1"].as<bool>(); // si debe se encenderse por algun tiempo
     if (doc["R_TIMER1"])
     {
         R_TIMER1 = doc["R_TIMER1"].as<int>();
@@ -703,7 +716,7 @@ bool apiPostRelay2(const String &data)
     {
         strlcpy(R_NAME2, doc["R_NAME2"].as<String>().c_str(), sizeof(R_NAME2));
     }
-    R_TIMERON2 = doc["TIMEONRELAY2"].as<bool>(); // si debe se encenderse por algun tiempo
+    R_TIMERON2 = doc["R_TIMERON2"].as<bool>(); // si debe se encenderse por algun tiempo
     if (doc["R_TIMER2"])
     {
         R_TIMER2 = doc["R_TIMER2"].as<int>();
@@ -1146,7 +1159,7 @@ bool apiPostControlDevice(const String &command) // cambiar el nombre de la func
     else if (output.startsWith("reconocida1"))
     {
         bool nameValue = jsonCommand["value"].as<bool>();
-        ALARM_RECONOCIDA1 = nameValue; // deberia ser un true
+        ALARM_RECONOCIDA1 = nameValue; // TODO: deberia ser un true //TODO: modificar en MQTT
         // settingsSave();                // falta reiniciar
         return true;
     }

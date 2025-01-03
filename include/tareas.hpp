@@ -4,6 +4,7 @@ void activarAlarma();
 void resetIntLoop();
 void fechaRlay();
 void mostrar();
+void ctrlRelays();
 
 // tarea de la reconexion del wifi
 void TaskWifiReconnect(void *pvParameters)
@@ -12,7 +13,7 @@ void TaskWifiReconnect(void *pvParameters)
     while (true)
     {
         vTaskDelay(10 / portTICK_PERIOD_MS);
-        if (wifi_app == WIFI_AP_STA) // TODO: o WIFI_AP_STA en tareas.hpp y en wifi.hpp
+        if (wifi_app == WIFI_STA) // TODO: o WIFI_AP_STA en tareas.hpp y en wifi.hpp
         {
             wifiSTALoop();
         }
@@ -30,7 +31,7 @@ void TaskMQTTReconnect(void *pvParameters)
     while (true)
     {
         vTaskDelay(10 / portTICK_PERIOD_MS);
-        if (WiFi.status() == WL_CONNECTED && (wifi_app == WIFI_AP_STA || wifi_app == WIFI_STA))
+        if (WiFi.status() == WL_CONNECTED && (wifi_app == WIFI_STA))
         {
             if (mqtt_server != 0)
             {
@@ -138,9 +139,10 @@ void TaskActualiza1seg(void *pvParameters)
         }
         device_fecha = getDateTime();
         activarAlarma();
-        actRele();        // verifica si hay que activar el relevador
-        fechaRlay();      // indica el horario de activacion y desactivacion
-        programaRelays(); // indica los dias de activacion de los relays
+        actRele();                                  // verifica si hay que activar el relevador
+        fechaRlay();                                // indica el horario de activacion y desactivacion
+        programaRelays();                           // indica los dias de activacion de los relays
+        ctrlRelays();                               // ejecuta el tiempo que debe activarse el relevador
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
@@ -167,8 +169,8 @@ void TaskTimeGrafica(void *pvParameters)
     while (1)
     {
         muestra();
-        vTaskDelay(60000 / portTICK_PERIOD_MS); // para que de 1 min
-        //vTaskDelay(600000 / portTICK_PERIOD_MS); // para 10 minuto portTICK_PERIOD_MS
+        // vTaskDelay(2000 / portTICK_PERIOD_MS); // para que de 2 segundo
+        vTaskDelay(60000 / portTICK_PERIOD_MS); // para 10 minuto portTICK_PERIOD_MS
     }
 }
 
