@@ -39,6 +39,16 @@ void handleApiHistorialAlarmas(AsyncWebServerRequest *request) //(espera el Asyn
     request->addInterestingHeader(HEADER_TEXT); // este es el header que responde al cliente 200 es OK
     request->send(200, dataTypeJson, apiHistorialAlarmas());
 }
+
+// handleApiHistorialBitacora
+void handleApiHistorialBitacora(AsyncWebServerRequest *request) //(espera el AsyncWebServerRequest)
+{
+    // valido el usuario y contraseña
+    validateUserAndPasswordResponse(request);
+    request->addInterestingHeader(HEADER_TEXT); // este es el header que responde al cliente 200 es OK
+    request->send(200, dataTypeJson, apiHistorialBitacora());
+}
+
 void handleApiInfo(AsyncWebServerRequest *request) //(espera el AsyncWebServerRequest)
 {
     // valido el usuario y contraseña
@@ -243,14 +253,33 @@ void handleApiGetTelegram(AsyncWebServerRequest *request)
     request->send(200, dataTypeJson, apiGetTelegram());
 }
 
-// handleApiPostStatus
+// handleApiPostTelegram
 void handleApiPostTelegram(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
     // validar el usuario y contraseña
     validateUserAndPasswordResponse(request);
     String bodyContent = GetBodyContent(data, len);
     // save
-    if (apiPostTelegram(bodyContent)) // para almacenar la data de MQTT
+    if (apiPostTelegram(bodyContent))
+    {
+        request->addInterestingHeader(HEADER_TEXT);
+        request->send(200, dataTypeJson, JSON_SAVE_TRUE);
+    }
+    else
+    {
+        request->addInterestingHeader(HEADER_TEXT);
+        request->send(400, dataTypeJson, JSON_ERROR);
+    }
+}
+
+// handleApiPostBitacora
+void handleApiPostBitacora(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    // validar el usuario y contraseña
+    validateUserAndPasswordResponse(request);
+    String bodyContent = GetBodyContent(data, len);
+    // save
+    if (apiPostBitacora(bodyContent)) // en el bodyContent viene la informacion de la aplicacion web
     {
         request->addInterestingHeader(HEADER_TEXT);
         request->send(200, dataTypeJson, JSON_SAVE_TRUE);
@@ -305,6 +334,17 @@ void handleApiDownloadAlarmas(AsyncWebServerRequest *request)
     AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/alarmas.json", dataTypeJson, true);
     request->send(response);
 }
+
+// handleApiDownloadBitacora
+void handleApiDownloadBitacora(AsyncWebServerRequest *request)
+{
+    validateUserAndPasswordResponse(request);
+    request->addInterestingHeader(HEADER_TEXT);
+    myLog("INFO", "api.hpp", "handleApiDownloadBitacora", "Descargar del archivo bitacora.json");
+    AsyncWebServerResponse *response = request->beginResponse(SPIFFS, "/bitacora.json", dataTypeJson, true); // TODO: probar con dataTypeHTML
+    request->send(response);
+}
+
 // subir el Firmware
 void handleApiFirmware(AsyncWebServerRequest *request, const String &filename, size_t index, uint8_t *data, size_t len, bool final)
 {

@@ -333,6 +333,14 @@ String alarma; // alamacena momentaneamente el nombre de la alarma
 String fechas; // alamacena en global momentaneamente fechas para el archivo de alarmas
 bool status;   // almacena momentaneamente el estado de la alarma
 
+//----------------------------------------------------------------
+// Variables para guardar la bitácora
+//----------------------------------------------------------------
+String nombretec; // alamacena momentaneamente el nombre del tecnico
+String fecha;     // alamacena en global momentaneamente la fecha para el archivo de la bitácora
+String info;      // almacena momentaneamente la informacion en la bitácora
+String tipo;      // almacena el tipo de comentario
+
 //---------------------------------------------------------------
 //----------------------------------------------------------------------------
 // maneja los relay desde la api y verificara el estado por minuto

@@ -33,6 +33,7 @@
 #include "mqtt.hpp"
 #include "spiffsGraficas.hpp" //archivo donde se guardan en json los datos de muestreo
 #include "spiffsTime.hpp"     //archiva dond se guarda la fecha de muestreo
+#include "spiffsBitacora.hpp" //archiva donde se guarda la informacion de la bitácora
 // metemos la libreria del servidor
 #include "server.hpp"
 #include "websockets.hpp"
@@ -113,8 +114,26 @@ void setup()
   if (!exiteArchivoAlarmas()) // pregunta si existe un archivo de alarmas?, si no, lo crea
   {                           // en este punto no el archivo ya existe se procede a salvarlo
     myLog("INFO", "main.cpp", "exiteArchivoAlarmas()", "archivo alarmas.json no existe creando archivo ...");
-    crearArchivoAlarmas();
-    myLog("INFO", "main.hpp", "exiteArchivoAlarmas()", "archivo alarmas.json creado");
+    if (crearArchivoAlarmas())
+    {
+      myLog("INFO", "main.hpp", "exiteArchivoAlarmas()", "archivo alarmas.json creado");
+    }
+    else
+    {
+      myLog("ERROR", "main.cpp", "crearArchivoAlarmas()", "Falla al crear el archivo alarmas.json");
+    }
+  }
+  if (!existeBitacora()) // pregunta si existe un archivo de bitacora?, si no, lo crea
+  {                      // en este punto no el archivo ya existe se procede a salvarlo
+    myLog("INFO", "main.cpp", "existeBitacora()", "archivo bitacora.json no existe creando archivo ...");
+    if (crearBitacora())
+    {
+      myLog("INFO", "main.hpp", "crearBitacora()", "archivo bitacora.json creado");
+    }
+    else
+    {
+      myLog("ERROR", "main.cpp", "crearBitacora()", "Falla al crear el archivo bitacora.json");
+    }
   }
   if (!OLED.begin(SSD1306_SWITCHCAPVCC, 0x3C)) // 0x3C alimentación a 3.3 volts
   {                                            // Dirección 0x3C

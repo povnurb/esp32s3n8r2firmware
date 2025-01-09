@@ -126,9 +126,21 @@ void initServer()
     // method: GET
     server.on("/api/device/alarmas-download", HTTP_GET, handleApiDownloadAlarmas);
 
+    // URL: /api/device/bitacora-download
+    // method: GET
+    server.on("/api/device/bitacora-download", HTTP_GET, handleApiDownloadBitacora);
+
     // URL: /api/device/alarmas-historial
     // method: GET
     server.on("/api/device/alarmas-historial", HTTP_GET, handleApiHistorialAlarmas);
+
+    // URL: /api/device/bitacora-historial
+    // method: GET
+    server.on("/api/device/bitacora-historial", HTTP_GET, handleApiHistorialBitacora);
+
+    // URL: /api/device/bitacora-historial
+    // method: POST
+    server.on("/api/device/bitacora-historial", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleApiPostBitacora);
 
     //---------------------------------------------------------------------------------
     // -------------------------------------------------------------------
@@ -220,6 +232,7 @@ void initServer()
         {"/js/183.js", file_183_js, file_183_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/261.js", file_261_js, file_261_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/289.js", file_289_js, file_289_js_length, dataTypeJavaScripts, dataEncoding},
+        //{"/js/330.js", file_330_js, file_330_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/338.js", file_338_js, file_338_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/333.js", file_333_js, file_333_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/360.js", file_360_js, file_360_js_length, dataTypeJavaScripts, dataEncoding},
@@ -233,6 +246,7 @@ void initServer()
         {"/js/649.js", file_649_js, file_649_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/671.js", file_671_js, file_671_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/724.js", file_724_js, file_724_js_length, dataTypeJavaScripts, dataEncoding},
+        {"/js/832.js", file_832_js, file_832_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/837.js", file_837_js, file_837_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/855.js", file_855_js, file_855_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/887.js", file_887_js, file_887_js_length, dataTypeJavaScripts, dataEncoding},

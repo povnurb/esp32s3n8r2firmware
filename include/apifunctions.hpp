@@ -1,6 +1,7 @@
 // funciones que complementan a la api
 // declaraciones
-// void setupPinAlarma1();
+boolean borrarBitacora();
+boolean salvarBitacora(String nombretecnico, String fechaB, String tipoD, String infoB);
 boolean deleteArchivoAlarmas();
 void enviarMensaje(String mensaje);
 void timeReset();
@@ -8,7 +9,7 @@ void dataGraficasReset();
 boolean timeSave();
 bool dataGraficasSave();
 
-String apiHistorialAlarmas() // FIXME: no se puede por que el archivo de origen agrega "," y ya no es un JSON
+String apiHistorialAlarmas()
 {
     // https://www.diarioelectronicohoy.com/blog/funcionalidad-de-spiffs
     String response = "";
@@ -26,6 +27,33 @@ String apiHistorialAlarmas() // FIXME: no se puede por que el archivo de origen 
         return response;
     }
     myLog("INFO", "apifunctions.hpp", "apiHistorialAlarmas()", "Entregando archivo");
+    String contenido = file.readString();
+    response = "[" + contenido + "]"; // para que se vea JSON
+
+    file.close();
+
+    return response;
+}
+
+// apiHistorialBitacora
+String apiHistorialBitacora()
+{
+    // https://www.diarioelectronicohoy.com/blog/funcionalidad-de-spiffs
+    String response = "";
+
+    JsonDocument jsonBitacoraHistorial; // objeto jsonBitacoraHistorial donde se leeran las configuraciones iniciales
+
+    File file = SPIFFS.open("/bitacora.json", "r"); // modo lectura antes o tambien en vez de FILE_READ , "r"
+
+    if (!file)
+    { // instalar la extencion TODO Highlight
+        // FIXME: Serial.println("[WARNING][settings.hpp][settingsRead()]Falla en abrir el archivo settings.json");
+        // dejare ese FIXME como ejemplo pero la siguiente linea es la solucion
+        myLog("ERROR", "apifunctions.hpp", "apiHistorialBitacora()", "Error al abrir el archivo alarmas.json");
+        // TODO: llamar a la función de iniciar el json de fabrica (HECHO)
+        return response;
+    }
+    myLog("INFO", "apifunctions.hpp", "apiHistorialBitacora()", "Entregando archivo");
     String contenido = file.readString();
     response = "[" + contenido + "]"; // para que se vea JSON
 
@@ -972,6 +1000,7 @@ void apiPostRestore(const char *origen)
 {
     settingsReset(); // para volve a los valores de fabrica
     deleteArchivoAlarmas();
+    borrarBitacora();
     timeReset();
     dataGraficasReset();
 
@@ -1561,6 +1590,7 @@ bool apiPostControlDevice(const String &command) // cambiar el nombre de la func
             dataGraficasReset();
             // resetear archivo de alarmas
             deleteArchivoAlarmas();
+            borrarBitacora();
             Serial.println("[RESTORE][RESTORE][RESTORE][RESTORE][RESTORE][RESTORE][RESTORE][RESTORE]");
             Serial.flush();
             ESP.restart(); // reiniciar la ESP
@@ -1850,4 +1880,43 @@ String apiGetIndexWs()
     //   Serializar
     serializeJsonPretty(jsonDoc, response);
     return response;
+}
+
+//-------------------post bitacora
+// post bitácora
+bool apiPostBitacora(const String &data)
+{
+    JsonDocument doc;
+    DeserializationError error = deserializeJson(doc, data);
+    // Serial.println("la data es:");
+    // Serial.println(data);
+    Serial.println(data);
+    Serial.flush();
+    serializeJsonPretty(doc, Serial);
+    if (error)
+    {
+        myLog("ERROR", "apifunctions.hpp", "apiPostBitacora()", "problemas al deserializar la data");
+        return false;
+    }
+
+    if (doc["nombretec"] && doc["nombretec"].as<String>().length() > 0)
+    {
+        nombretec = doc["nombretec"].as<String>();
+    }
+
+    if (doc["fecha"] && doc["fecha"].as<String>().length() > 0)
+    {
+        fecha = doc["fecha"].as<String>();
+    }
+    if (doc["tipo"] && doc["tipo"].as<String>().length() > 0)
+    {
+        tipo = doc["tipo"].as<String>();
+    }
+    if (doc["info"] && doc["info"].as<String>().length() > 0)
+    {
+        info = doc["info"].as<String>();
+    }
+
+    // guardar la informacion
+    return salvarBitacora(nombretec, fecha, tipo, info);
 }
