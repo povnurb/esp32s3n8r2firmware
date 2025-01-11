@@ -301,7 +301,7 @@ float readSensorPozo(int pinsensor)
 
 // --------------------------------------------------------------
 // Temperaturas y humedad
-//  objeto DHT
+//  objeto DHT22 mejorar el codigo para que no se reutilize
 DHT dht(DHTPIN, DHT22);
 float Temperatura() // para la otra mandar un String
 {
@@ -1635,6 +1635,7 @@ void mostrar()
             OLED.print(humedad);
         }
         OLED.println(" %");
+
         OLED.display();
         // myLog("INFO", "functions.hpp", "mostrar", "MODO PUNTO DE ACCESO");
         Serial.flush();
@@ -1668,6 +1669,7 @@ void mostrar()
             OLED.print(humedad);
         }
         OLED.println(" %");
+        OLED.println("demo.iotmx.com");
         OLED.display();
     }
 }

@@ -2,8 +2,9 @@ void alarmaPresente(String alarma, String fecha, bool presente);
 
 // para telegram
 void enviarMensaje(String mensaje);
-// parece que el problema esta en el setup FIXME:
-//  Estructura de la alarma
+// para whatsapp
+void enviarMensajeWhatsapp(String message);
+
 //   -------------------------------------------------------------------
 struct Alarma
 {
@@ -551,9 +552,10 @@ void contadorAlarmas()
                 fechaClear[i] = "";
                 cambiar[i] = true;
                 // TODO: reconocer es para registrar la alarma
-                if(reconocer[i]){
+                if (reconocer[i])
+                {
 
-                alarmaPresente(names[i], fechaAct[i], true);
+                    alarmaPresente(names[i], fechaAct[i], true);
                 }
             }
             else if (!digitalRead(pines[i]) && cambiar[i])
@@ -561,9 +563,10 @@ void contadorAlarmas()
                 cambiar[i] = false;
                 fechaClear[i] = getDateTime();
                 // TODO:
-                if(reconocer[i]){
+                if (reconocer[i])
+                {
 
-                alarmaPresente(names[i], fechaAct[i], false);
+                    alarmaPresente(names[i], fechaAct[i], false);
                 }
             }
         }
@@ -576,9 +579,10 @@ void contadorAlarmas()
                 fechaClear[i] = "";
                 cambiar[i] = true;
                 // TODO:
-                if(reconocer[i]){
+                if (reconocer[i])
+                {
 
-                alarmaPresente(names[i], fechaAct[i], true);
+                    alarmaPresente(names[i], fechaAct[i], true);
                 }
             }
             else if (digitalRead(pines[i]) && cambiar[i])
@@ -586,9 +590,10 @@ void contadorAlarmas()
                 cambiar[i] = false;
                 fechaClear[i] = getDateTime();
                 // TODO:
-                if(reconocer[i]){
+                if (reconocer[i])
+                {
 
-                alarmaPresente(names[i], fechaClear[i], false);
+                    alarmaPresente(names[i], fechaClear[i], false);
                 }
             }
         }
@@ -722,6 +727,7 @@ void fechaRlay()
         if (programado1)
         {
             enviarMensaje("El relevador " + String(R_NAME1) + " de la sala " + sala + " esta activado");
+            enviarMensajeWhatsapp("El relevador " + String(R_NAME1) + " de la sala " + sala + " esta activado");
         }
     }
     else if (!RELAY1_STATUS && CRELAY1)
@@ -731,6 +737,7 @@ void fechaRlay()
         if (programado1)
         {
             enviarMensaje("El relevador " + String(R_NAME1) + " de la sala " + sala + " esta desactivado");
+            enviarMensajeWhatsapp("El relevador " + String(R_NAME1) + " de la sala " + sala + " esta desactivado");
         }
     }
     if (RELAY2_STATUS && !CRELAY2)
@@ -742,6 +749,7 @@ void fechaRlay()
         if (programado2)
         {
             enviarMensaje("El relevador " + String(R_NAME2) + " de la sala " + sala + " esta activado");
+            enviarMensajeWhatsapp("El relevador " + String(R_NAME2) + " de la sala " + sala + " esta activado");
         }
     }
     else if (!RELAY2_STATUS && CRELAY2)
@@ -751,6 +759,7 @@ void fechaRlay()
         if (programado2)
         {
             enviarMensaje("El relevador " + String(R_NAME2) + " de la sala " + sala + " esta desactivado");
+            enviarMensajeWhatsapp("El relevador " + String(R_NAME2) + " de la sala " + sala + " esta desactivado");
         }
     }
 };
@@ -874,10 +883,12 @@ void alarmaPresente(String alarma, String fecha, bool presente)
         {
 
             enviarMensaje("Alarma presente en " + sala + ": " + alarma);
+            enviarMensajeWhatsapp("Alarma presente en " + sala + ": " + alarma);
         }
         else
         {
             enviarMensaje("Alarma clareada en " + sala + ": " + alarma);
+            enviarMensajeWhatsapp("Alarma clareada en " + sala + ": " + alarma);
         }
     }
     else

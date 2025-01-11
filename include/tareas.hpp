@@ -107,10 +107,6 @@ void TaskActualiza1seg(void *pvParameters)
         temp1 = readSensorPozo(SENSOREVAPORADOR) + ajTmpP1;
         device_tempCondensador = String(readSensorPozo(SENSORCONDENSADOR) + ajTmpP2);
         temp2 = readSensorPozo(SENSORCONDENSADOR) + ajTmpP2;
-        device_tempDHT = String(Temperatura());
-        device_humedadDHT = String(Humedad());
-        device_tempMinima = String(tempMin());
-        device_tempMaxima = String(tempMax());
         // TODO: agregar las temperaturas del pozo1 y pozo2 asi como del lm35
         device_ativeTime = longTimeStr(millis() / 1000);
         device_rssi = WiFi.status() == WL_CONNECTED ? WiFi.RSSI() : 0;
@@ -139,13 +135,30 @@ void TaskActualiza1seg(void *pvParameters)
         }
         device_fecha = getDateTime();
         activarAlarma();
-        actRele();                                  // verifica si hay que activar el relevador
-        fechaRlay();                                // indica el horario de activacion y desactivacion
-        programaRelays();                           // indica los dias de activacion de los relays
-        ctrlRelays();                               // ejecuta el tiempo que debe activarse el relevador
+        actRele();        // verifica si hay que activar el relevador
+        fechaRlay();      // indica el horario de activacion y desactivacion
+        programaRelays(); // indica los dias de activacion de los relays
+        ctrlRelays();     // ejecuta el tiempo que debe activarse el relevador
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
+
+// tareas que actualizan variables cada 2 segundos para el DHT22
+void TaskActualiza2seg(void *pvParameters)
+{
+    (void)pvParameters;
+    // desabilitar el washdog con esto ya no se ejecuta el perro guardian dentro de esta tarea
+    while (true)
+    {
+
+        device_tempDHT = String(Temperatura());
+        device_humedadDHT = String(Humedad());
+        device_tempMinima = String(tempMin());
+        device_tempMaxima = String(tempMax());
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
+    }
+}
+
 // tareas que actualizan variables menos importantes cada 30 segundo
 void TaskActualiza10seg(void *pvParameters)
 {

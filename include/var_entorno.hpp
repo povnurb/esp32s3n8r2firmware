@@ -26,8 +26,8 @@ String DnsSecondary = "10.106.10.2";
 boolean MqttAcceso = true;
 String MqttServer = "140.84.188.157"; // iotmx.com pero se puede perder el dominio
 int MqttPort = 1883;
-String MqttUser = "asignar";
-String MqttPassword = "public";
+String MqttUser = "Uninet2";    // asignar
+String MqttPassword = "telmex"; // public
 
 // si dese desea cambiar el topico es en la funcion PathMqttTopic() en el archivo functions.hpp
 
@@ -40,6 +40,6 @@ String chatID;
 // el chat ID se le pregunta al bot GET MY ID se busca en telegram
 
 // solo para probar mientras
-boolean whatsapp = true;
-String MobileNumber = "ADD_YOUR_PHONE_NUMBER";
-String APIKey = "ADD_YOUR_API_KEY";
+boolean whatsapp;
+String MobileNumber;
+String APIKey;

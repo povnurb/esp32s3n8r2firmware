@@ -110,6 +110,14 @@ void initServer()
     // method: POST
     server.on("/api/device/telegram", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleApiPostTelegram);
 
+    // URL: /api/device/whatsapp
+    // method: GET
+    server.on("/api/device/whatsapp", HTTP_GET, handleApiGetWhatsapp);
+
+    // URL: /api/device/whatsapp
+    // method: POST
+    server.on("/api/device/whatsapp", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleApiPostWhatsapp);
+
     // URL: /api/device/restart
     // method: POST
     server.on("/api/device/restart", HTTP_POST, handleApiPostRestart);
@@ -225,7 +233,7 @@ void initServer()
         {"/js/chunk-vendors.js", chunk_vendors_js, chunk_vendors_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/23.js", file_23_js, file_23_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/29.js", file_29_js, file_29_js_length, dataTypeJavaScripts, dataEncoding},
-        {"/js/33.js", file_33_js, file_33_js_length, dataTypeJavaScripts, dataEncoding},
+        //{"/js/33.js", file_33_js, file_33_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/68.js", file_68_js, file_68_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/73.js", file_73_js, file_73_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/135.js", file_135_js, file_135_js_length, dataTypeJavaScripts, dataEncoding},
@@ -233,11 +241,13 @@ void initServer()
         {"/js/261.js", file_261_js, file_261_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/289.js", file_289_js, file_289_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/330.js", file_330_js, file_330_js_length, dataTypeJavaScripts, dataEncoding},
-        {"/js/338.js", file_338_js, file_338_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/333.js", file_333_js, file_333_js_length, dataTypeJavaScripts, dataEncoding},
+        {"/js/338.js", file_338_js, file_338_js_length, dataTypeJavaScripts, dataEncoding},
+        {"/js/395.js", file_395_js, file_395_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/360.js", file_360_js, file_360_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/414.js", file_414_js, file_414_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/436.js", file_436_js, file_436_js_length, dataTypeJavaScripts, dataEncoding},
+        {"/js/440.js", file_440_js, file_440_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/487.js", file_487_js, file_487_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/491.js", file_491_js, file_491_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/573.js", file_573_js, file_573_js_length, dataTypeJavaScripts, dataEncoding},

@@ -172,6 +172,9 @@ void setup()
   // tarea que actualiza varias variables cada 1 segundo
   TaskHandle_t Actualiza1segTaskHandle;
   xTaskCreatePinnedToCore(TaskActualiza1seg, "TaskActualiza1seg", 1024 * 10, NULL, 1, &Actualiza1segTaskHandle, 1);
+  // tarea que actualiza varias variables cada 2 segundo para que funcione correctamente el DHT22
+  TaskHandle_t Actualiza2segTaskHandle;
+  xTaskCreatePinnedToCore(TaskActualiza2seg, "TaskActualiza2seg", 1024 * 10, NULL, 1, &Actualiza2segTaskHandle, 1);
   // tarea que actualiza varias variables cada 10 segundo
   TaskHandle_t Actualiza10segTaskHandle;
   xTaskCreatePinnedToCore(TaskActualiza10seg, "TaskActualiza10seg", 1024 * 8, NULL, 1, &Actualiza10segTaskHandle, 1);

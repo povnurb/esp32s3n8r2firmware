@@ -6,7 +6,7 @@
 // https://www.callmebot.com/blog/free-api-whatsapp-messages/
 // https://microcontrollerslab.com/esp32-send-whatsapp-messages/
 
-void sendMessage(String message)
+void enviarMensajeWhatsapp(String message)
 {
     if (whatsapp)
     {
@@ -19,7 +19,7 @@ void sendMessage(String message)
         int httpResponseCode = http.POST(url);
         if (httpResponseCode == 200)
         {
-            Serial.print("Message sent successfully");
+            Serial.print("Mensaje enviado por WhatsApp");
         }
         else
         {

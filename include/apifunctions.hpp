@@ -4,6 +4,7 @@ boolean borrarBitacora();
 boolean salvarBitacora(String nombretecnico, String fechaB, String tipoD, String infoB);
 boolean deleteArchivoAlarmas();
 void enviarMensaje(String mensaje);
+void enviarMensajeWhatsapp(String mensaje);
 void timeReset();
 void dataGraficasReset();
 boolean timeSave();
@@ -983,6 +984,57 @@ bool apiPostTelegram(const String &data)
     return settingsSave();
 }
 
+// get whatsapp
+String apiGetWhatsapp()
+{
+    String response = "";
+    JsonDocument jsonDoc;
+    // General
+    jsonDoc["whatsapp"] = whatsapp;
+    jsonDoc["MobileNumber"] = MobileNumber;
+    jsonDoc["APIKey"] = APIKey;
+
+    serializeJsonPretty(jsonDoc, response);
+    return response;
+}
+
+// post whatsapp
+bool apiPostWhatsapp(const String &data)
+{
+    JsonDocument doc;
+    DeserializationError error = deserializeJson(doc, data);
+    // Serial.println("la data es:");
+    // Serial.println(data);
+    Serial.println(data);
+    Serial.flush();
+    serializeJsonPretty(doc, Serial);
+    if (error)
+    {
+        myLog("ERROR", "apifunctions.hpp", "apiPostRelays()", "problemas al deserializar la data");
+        return false;
+    }
+    // validar el json
+    /*if (!validationMqttParam(doc)) //FIXME: tal vez no es necesacio
+    {
+        return false;
+    }*/
+    // si paso los filtros anteriores empezamo a validar el MQTT
+    whatsapp = doc["whatsapp"].as<bool>();
+
+    if (doc["MobileNumber"] && doc["MobileNumber"].as<String>().length() > 0)
+    {
+        MobileNumber = doc["MobileNumber"].as<String>();
+    }
+
+    if (doc["APIKey"] && doc["APIKey"].as<String>().length() > 0)
+    {
+        APIKey = doc["APIKey"].as<String>();
+    }
+
+    // guardar la informacion
+    return settingsSave();
+}
+
 // reiniciar el ESP32
 void apiPostRestart(const char *origen)
 {
@@ -1079,6 +1131,43 @@ bool apiPostControlDevice(const String &command) // cambiar el nombre de la func
         settingsSave(); // guardar la configuracion
         return true;
     }
+    //-----------------------------------------------------------------
+    else if (output.startsWith("WHATSAPP"))
+    {
+        bool onOffWhatsapp = jsonCommand["value"];
+
+        whatsapp = onOffWhatsapp;
+        settingsSave(); // guardar la configuracion
+        return true;
+    }
+    else if (output.startsWith("WHATSMENSAJE"))
+    {
+        bool menswhats = jsonCommand["value"];
+
+        if (menswhats)
+        {
+            enviarMensajeWhatsapp("Bot " + sala + " en linea");
+            return true;
+        }
+        return false;
+    }
+    else if (output.startsWith("NUMEROMOVIL"))
+    {
+        String cel = jsonCommand["value"].as<String>();
+
+        MobileNumber = cel;
+        settingsSave(); // guardar la configuracion
+        return true;
+    }
+    else if (output.startsWith("APIKEY"))
+    {
+        String wapikey = jsonCommand["value"].as<String>();
+
+        APIKey = wapikey;
+        settingsSave(); // guardar la configuracion
+        return true;
+    }
+    //-----------------------------------------------------------------
     else if (output.startsWith("BUZZER"))
     {
         bool buzzerValue = jsonCommand["value"];

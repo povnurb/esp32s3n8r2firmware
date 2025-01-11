@@ -42,6 +42,9 @@ boolean settingsRead()
     telegram = jsonSettings["telegram"] | false;
     botToken = jsonSettings["botToken"].as<String>();
     chatID = jsonSettings["chatID"].as<String>();
+    whatsapp = jsonSettings["whatsapp"] | false;
+    MobileNumber = jsonSettings["MobileNumber"].as<String>();
+    APIKey = jsonSettings["APIKey"].as<String>();
     gerencia = jsonSettings["gerencia"].as<String>();
     ciudad = jsonSettings["ciudad"].as<String>();
     central = jsonSettings["central"].as<String>();
@@ -201,6 +204,9 @@ void settingsReset()
     telegram = true;
     botToken = "7678398303:AAEZq0Y941WBAfQcDR0qEn5CNITJwyT4FSA"; // Reemplaza con tu token de bot
     chatID = "7077248297";
+    whatsapp = true;
+    MobileNumber = "5219211355959";
+    APIKey = "8124673";
     gerencia = "coatza";
     ciudad = "coatza";
     central = "coaigl";
@@ -360,6 +366,9 @@ boolean settingsSave()
     jsonSettings["telegram"] = telegram;
     jsonSettings["botToken"] = botToken;
     jsonSettings["chatID"] = chatID;
+    jsonSettings["whatsapp"] = whatsapp;
+    jsonSettings["MobileNumber"] = MobileNumber;
+    jsonSettings["APIKey"] = APIKey;
     // generales
     jsonSettings["gerencia"] = gerencia;
     jsonSettings["ciudad"] = ciudad;

@@ -272,6 +272,34 @@ void handleApiPostTelegram(AsyncWebServerRequest *request, uint8_t *data, size_t
     }
 }
 
+// para whatsapp
+void handleApiGetWhatsapp(AsyncWebServerRequest *request)
+{
+    // validar el usuario y contraseña
+    validateUserAndPasswordResponse(request);
+    request->addInterestingHeader(HEADER_TEXT);
+    request->send(200, dataTypeJson, apiGetWhatsapp());
+}
+
+// handleApiPostWhatsapp
+void handleApiPostWhatsapp(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    // validar el usuario y contraseña
+    validateUserAndPasswordResponse(request);
+    String bodyContent = GetBodyContent(data, len);
+    // save
+    if (apiPostWhatsapp(bodyContent))
+    {
+        request->addInterestingHeader(HEADER_TEXT);
+        request->send(200, dataTypeJson, JSON_SAVE_TRUE);
+    }
+    else
+    {
+        request->addInterestingHeader(HEADER_TEXT);
+        request->send(400, dataTypeJson, JSON_ERROR);
+    }
+}
+
 // handleApiPostBitacora
 void handleApiPostBitacora(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
