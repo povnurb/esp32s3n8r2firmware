@@ -134,6 +134,8 @@ String JsonMsg()
     jsonDoc["device_hardware"] = String(device_hw_version);
     jsonDoc["device_sdk"] = sdkVersion;
     jsonDoc["prueba_de_alarmas"] = prueba;
+    jsonDoc["telegram"] = telegram;
+    jsonDoc["whatsapp"] = whatsapp;
     // data con informacion que actualizaremos cada 1 segundo
     JsonObject dataObj = jsonDoc["data"].to<JsonObject>();
     dataObj["device_dimmer"] = device_dimmer;
