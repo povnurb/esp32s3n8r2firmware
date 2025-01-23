@@ -303,6 +303,47 @@ float readSensorPozo(int pinsensor)
 // Temperaturas y humedad
 //  objeto DHT22 mejorar el codigo para que no se reutilize
 DHT dht(DHTPIN, DHT22);
+// probando con esta funcion de IA
+float Temperatura()
+{
+    // isnan(dht.readTemperature())
+    Serial.println("Se va hacer TemDHt22");
+    // float tempC = dht.readTemperature();
+    float temp2c = dht.readTemperature();
+    float tempC = isnan(temp2c) ? tempC : temp2c;
+    // Serial.println("Se hace lectura temperatura DHt22");
+    if (isnan(tempC))
+    {
+        myLog("ERROR", "functions.hpp", "Temperatura()", "error en la medicion del Dht22");
+    }
+    /*else if (tempC <= 0)
+    {
+        myLog("ERROR", "functions.hpp", "Temperatura()", "valor de temperatura inválido, conservamos el último valor");
+        tempC = dht.readTemperature();
+    }*/
+    tempCMasAjuste = tempC + ajTmpDht22;
+    float min = tempCMasAjuste;
+    ;
+    if (min <= 1)
+    {
+        min2 == min2;
+    }
+    else if (min < min2)
+    {
+        min2 = min;
+    }
+    device_tempMinima = String(min2);
+    float max = tempCMasAjuste;
+    if (max > max2)
+    {
+        max2 = max;
+    }
+    device_tempMaxima = String(max2);
+    Serial.println("Se retorna valor TemDHt22");
+    return (tempCMasAjuste); // un ajuste de calibracion segun el criterio
+}
+
+/*
 float Temperatura() // para la otra mandar un String
 {
     if (isnan(dht.readTemperature())) // esta listo para medir
@@ -324,25 +365,53 @@ float Temperatura() // para la otra mandar un String
     // Serial.print(tempC + ajTmpDht22);
     return (tempC + ajTmpDht22); // un ajuste de calibracion segun el criterio
 }
+*/
+/*
 float Humedad()
 {
-    if (isnan(dht.readHumidity()))
+    Serial.println("Se va hacer HumedadDHt22");
+    humedad = dht.readHumidity(); // tenia float por lo tanto no se guardaba globalmente
+    //Serial.println("Se hace lectura de humedad DHt22");
+    if (isnan(humedad))
     {
-        humedad = humedad;
+        static float lastValidHumedad = 0.0;
+        humedad = lastValidHumedad; // conservamos el ultimo valor
         if (humedad <= 0)
         {
             myLog("ERROR", "functions.hpp", "humedad()", "error en la medicion del Dht22");
             humedad = dht.readHumidity(); // lo volvemos a intentar
+            lastValidHumedad = humedad;   // guardamos el nuevo valor
         }
-        myLog("ERROR", "functions.hpp", "humedad()", "error en la medicion del Dht22 conservamos el ultimo valor");
+        else
+        {
+            myLog("ERROR", "functions.hpp", "humedad()", "error en la medicion del Dht22 conservamos el ultimo valor");
+        }
+    }
+    Serial.println("Se retorna valor de humedad");
+    return humedad;
+}*/
+
+float Humedad()
+{
+    Serial.println("Se va hacer HumedadDHt22");
+    float hum2c = dht.readHumidity();
+    float humedad2 = isnan(hum2c) ? humedad : hum2c; // tenia float por lo tanto no se guardaba globalmente
+
+    if (humedad2 < 0 || humedad2 == NAN)
+    {
+        return humedad;
     }
     else
     {
-        humedad = dht.readHumidity();
+        humedad = humedad2;
     }
+    Serial.println("Se retorna HumedadDHt22");
     return humedad;
 }
-float tempMin()
+
+/*
+
+float tempMin() // ya no se esta haciendo
 {
 
     float min = Temperatura();
@@ -357,7 +426,10 @@ float tempMin()
 
     return min2;
 }
-float tempMax()
+*/
+/*
+
+float tempMax() // ya no se esta haciendo
 {
 
     float max = Temperatura();
@@ -368,6 +440,7 @@ float tempMax()
     // Serial.println(max2);
     return max2;
 }
+*/
 
 // entrega el tiempo que ha transcurrido o tiempo de funcionamiento del dispositivo
 String longTimeStr(const time_t &t)
@@ -773,7 +846,7 @@ void mostrarValoresTemp()
 
 bool pruebaTc()
 {
-    int nuevaTemperatura = Temperatura() * 10;
+    int nuevaTemperatura = tempCMasAjuste * 10;
     // Serial.println(tempC);
     if (1 < nuevaTemperatura < 999)
     {
@@ -799,7 +872,7 @@ void ejecutarTc()
 {
     if (pruebaTc())
     {
-        int nuevaTemperatura = Temperatura();
+        int nuevaTemperatura = tempCMasAjuste;
         Serial.print(nuevaTemperatura);
         myLog("Error", "functions.hpp", "ejecutarTc()", "Error con la medición de la temperatura");
     }
@@ -1067,7 +1140,7 @@ void muestra() // esta funcion toma una muestra de la temperatura y la humedad
         ejecutarHum();
         ejecutarTmp1();
         ejecutarTmp2();
-        ejecutarLm35();
+        // ejecutarLm35();//FIXME: poner cuando exista sensor
         ejecutarTime();
         if ((1 < tempC < 99) && (1 < humedad < 99) && (1 < temp1 < 99) && (1 < temp2 < 99) && (1 < templm35 < 150))
         {
@@ -1617,22 +1690,22 @@ void mostrar()
         OLED.println(String(ap_ssid));
         OLED.println(ipToStr(WiFi.softAPIP())); // ipStr(WiFi.softAPIP())
         OLED.println(getDateTime());
-        if (tempC < 2)
+        if (tempCMasAjuste < 2)
         {
             OLED.print("WAIT");
         }
         else
         {
-            OLED.print(tempC);
+            OLED.print(tempCMasAjuste);
         }
         OLED.print(" C   ");
-        if (humedad < 2)
+        if (humedad < 2) // FIXME:debe ser float
         {
             OLED.print("WAIT");
         }
         else
         {
-            OLED.print(humedad);
+            OLED.print(humedad); // FIXME:debe ser float
         }
         OLED.println(" %");
 
@@ -1651,22 +1724,22 @@ void mostrar()
         OLED.println(ipToStr(WiFi.localIP()));
         // tal vez mostrar si hay alarma presente
         OLED.println(getDateTime());
-        if (tempC < 2)
+        if (tempCMasAjuste < 2)
         {
             OLED.print("WAIT");
         }
         else
         {
-            OLED.print(tempC);
+            OLED.print(tempCMasAjuste);
         }
         OLED.print(" C   ");
-        if (humedad < 2)
+        if (humedad < 2) // FIXME:debe ser float
         {
             OLED.print("WAIT");
         }
         else
         {
-            OLED.print(humedad);
+            OLED.print(humedad); // FIXME:debe ser float
         }
         OLED.println(" %");
         OLED.println("demo.iotmx.com");

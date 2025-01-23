@@ -101,8 +101,8 @@ void TaskActualiza1seg(void *pvParameters)
         device_relay01 = RELAY1_STATUS ? true : false;
         device_relay02 = RELAY2_STATUS ? true : false;
         device_dimmer = dim;
-        templm35 = sensorLm35();
-        device_lm35 = String(templm35);
+        // templm35 = sensorLm35();//FIXME: se quitan mientras no exista sensor
+        // device_lm35 = String(templm35);//FIXME: se quitan mientras no exista sensor
         device_tempEvaporador = String(readSensorPozo(SENSOREVAPORADOR) + ajTmpP1);
         temp1 = readSensorPozo(SENSOREVAPORADOR) + ajTmpP1;
         device_tempCondensador = String(readSensorPozo(SENSORCONDENSADOR) + ajTmpP2);
@@ -144,21 +144,113 @@ void TaskActualiza1seg(void *pvParameters)
 }
 
 // tareas que actualizan variables cada 2 segundos para el DHT22
+// version IA1 pero la primer funcion se ejecuta 2 veces
+/*
+
 void TaskActualiza2seg(void *pvParameters)
 {
     (void)pvParameters;
-    // desabilitar el washdog con esto ya no se ejecuta el perro guardian dentro de esta tarea
+
+    unsigned long previousMillisTemp = 0;
+    unsigned long previousMillisHum = 0;
+    const unsigned long interval = 2000; // 2 segundos
+
+    while (true)
+    {
+        unsigned long currentMillis = millis();
+
+        if (currentMillis - previousMillisTemp >= interval)
+        {
+            previousMillisTemp = currentMillis;
+            device_tempDHT = String(Temperatura());
+        }
+
+        if (currentMillis - previousMillisHum >= 2 * interval)
+        { // 4 segundos desde el inicio
+            previousMillisHum = currentMillis;
+            device_humedadDHT = String(Humedad());
+        }
+
+        vTaskDelay(10 / portTICK_PERIOD_MS); // Pequeño retardo para evitar el "task starvation"
+    }
+}
+*/
+// version IA2
+/*
+void TaskActualiza2seg(void *pvParameters)
+{
+    (void)pvParameters;
+
+    while (true)
+    {
+        device_tempDHT = String(Temperatura());
+        vTaskDelay(2501 / portTICK_PERIOD_MS); // Espera 2 segundos
+    }
+}*/
+/*void TaskActualiza2Humseg(void *pvParameters)
+{
+    (void)pvParameters;
+    disableCore0WDT(); // asegurate que esta tarea esta en el core 0
+    while (true)
+    {
+        device_humedadDHT = String(Humedad());
+        vTaskDelay(3100 / portTICK_PERIOD_MS); // Espera 2 segundos
+    }
+}
+*/
+// tercera version IA
+void TaskActualiza2seg(void *pvParameters)
+{
+    (void)pvParameters;
+    // disableCore0WDT(); //no finciono por eso se quito
+    unsigned long previousMillis = 0;
+    const unsigned long interval = 3500; // 3 segundos
+    bool isTempNext = true;
+
+    while (true)
+    {
+        unsigned long currentMillis = millis();
+
+        if (currentMillis - previousMillis >= interval)
+        {
+            previousMillis = currentMillis;
+
+            if (isTempNext)
+            {
+                device_tempDHT = String(Temperatura());
+                // Serial.print("Temperatura: ");
+                // Serial.println(device_tempDHT);
+            }
+            else
+            {
+                device_humedadDHT = String(Humedad());
+                // Serial.print("Humedad: ");
+                // Serial.println(device_humedadDHT);
+            }
+
+            isTempNext = !isTempNext; // Alterna entre temperatura y humedad
+        }
+
+        vTaskDelay(2/ portTICK_PERIOD_MS); // Pequeño retardo para evitar el "task starvation"
+    }
+}
+
+/*void TaskActualiza2seg(void *pvParameters)
+{
+
+    (void)pvParameters;
+
     while (true)
     {
 
         device_tempDHT = String(Temperatura());
         device_humedadDHT = String(Humedad());
-        device_tempMinima = String(tempMin());
-        device_tempMaxima = String(tempMax());
-        vTaskDelay(2000 / portTICK_PERIOD_MS);
+        //device_tempMinima = String(min2);
+        //device_tempMaxima = String(max2);
+        vTaskDelay(4000 / portTICK_PERIOD_MS);
     }
 }
-
+*/
 // tareas que actualizan variables menos importantes cada 30 segundo
 void TaskActualiza10seg(void *pvParameters)
 {

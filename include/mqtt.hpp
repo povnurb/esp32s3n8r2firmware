@@ -129,6 +129,7 @@ String JsonMsg()
     //  crear el json con informacion que solo se ejecuta una sola vez
     jsonDoc["device_serial"] = deviceSerial;
     jsonDoc["device_name"] = device_name;
+    jsonDoc["sala"] = sala;
     jsonDoc["device_manufacture"] = deviceManofactura;
     jsonDoc["device_firmware"] = device_fw_version;
     jsonDoc["device_hardware"] = String(device_hw_version);

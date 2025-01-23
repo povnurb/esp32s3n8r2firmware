@@ -32,7 +32,7 @@ usaremos los GPIO 08(SDA) y 09(SCL) para el display OLED
 #define BUZZER 21           // GPIO 21 ZUMBADOR
 #define TMOSFET1 10         // TODO: salidas quedan pendientes para despues ver que hacer
 #define TMOSFET2 11         // TODO: salidas
-#define DHTPIN 12           // GPIO 12 entrada sensor dht22 (temperatura y humedad)
+#define DHTPIN 2           // GPIO 12 entrada sensor dht22 (temperatura y humedad)
 #define BTNRST 15           // boton que reseteara o restaurar el dispositivo
 #define BTN_ENABLE 16       // TODO:boton que habilita o desabilita alguna función
 #define SWITCHTESTALARM 13  // SWITCH de prueba de las alarmas en local se activa con una tierra
@@ -182,7 +182,7 @@ Adafruit_NeoPixel NeoPixel = Adafruit_NeoPixel(1, LEDNEOPIXEL, NEO_GRB + NEO_KHZ
 // put function declarations here:
 
 // variables para las temperaturas y humedades
-float humedad, temp1, temp2, templm35, tempC; // Humedad dht22, temperatura pozo1, temperatura pozo2 , temperatura lm35,Temperatura del DHT22
+float humedad, temp1, temp2, templm35, tempC, tempCMasAjuste; // Humedad dht22, temperatura pozo1, temperatura pozo2 , temperatura lm35,Temperatura del DHT22
 float min2 = 100;
 float max2;
 // ajustes minimos de sensores de temperatura

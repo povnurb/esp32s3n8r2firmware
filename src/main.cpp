@@ -18,6 +18,7 @@
 #include <DNSServer.h> // para DNS
 
 /*Librerias agregadas para nuevas funcionalidades y obligatorias (LALO)*/
+#include <Adafruit_Sensor.h>
 #include <DHT.h>                // para la temperatura y humedad by Adafruit
 #include <Adafruit_I2CDevice.h> //Para la comunicaciones serial by Adafruit
 #include <Adafruit_GFX.h>       // para la pantalla de lcd de gráficos (cuadrados circulos toda una especializacion)
@@ -165,7 +166,7 @@ void setup()
   xTaskCreatePinnedToCore(TaskWifiReconnect, "TaskWifiReconnect", 1024 * 10, NULL, 1, &wifiTaskHandle, 1);
   // Crear tarea para la reconexión de MQTT
   TaskHandle_t mqttTaskHandle;
-  xTaskCreatePinnedToCore(TaskMQTTReconnect, "TaskMQTTReconnect", 1024 * 10, NULL, 1, &mqttTaskHandle, 1); // tareas importantes
+  xTaskCreatePinnedToCore(TaskMQTTReconnect, "TaskMQTTReconnect", 1024 * 10, NULL, 1, &mqttTaskHandle, 1); // tareas importantes core1
   // pestañeo del LED MQTT (AZUL)
   TaskHandle_t LedMqttTaskHandle;
   xTaskCreatePinnedToCore(TaskLedMqttReconnect, "TaskLedMqttReconnect", 1024 * 3, NULL, 1, &LedMqttTaskHandle, 0); // tarea no tan importante, paso al core 0
@@ -174,8 +175,11 @@ void setup()
   xTaskCreatePinnedToCore(TaskActualiza1seg, "TaskActualiza1seg", 1024 * 10, NULL, 1, &Actualiza1segTaskHandle, 1);
   // tarea que actualiza varias variables cada 2 segundo para que funcione correctamente el DHT22
   TaskHandle_t Actualiza2segTaskHandle;
-  xTaskCreatePinnedToCore(TaskActualiza2seg, "TaskActualiza2seg", 1024 * 10, NULL, 1, &Actualiza2segTaskHandle, 1);
-  // tarea que actualiza varias variables cada 10 segundo
+  xTaskCreatePinnedToCore(TaskActualiza2seg, "TaskActualiza2seg", 1024 * 12, NULL, 1, &Actualiza2segTaskHandle, 1); // FIXME: tarea en el core 1 para ver si es la del problema
+  // tarea que actualiza la variable cada 2 segundo de humedad para que funcione correctamente el DHT22
+  // TaskHandle_t Actualiza2segHumTaskHandle;
+  // xTaskCreatePinnedToCore(TaskActualiza2Humseg, "TaskActualiza2seg", 1024 * 12, NULL, 1, &Actualiza2segHumTaskHandle, 0); // FIXME: tarea en el core 1 para ver si es la del problema
+  //  tarea que actualiza varias variables cada 10 segundo
   TaskHandle_t Actualiza10segTaskHandle;
   xTaskCreatePinnedToCore(TaskActualiza10seg, "TaskActualiza10seg", 1024 * 8, NULL, 1, &Actualiza10segTaskHandle, 1);
   // tarea que toma la muestras para la grafica
@@ -183,7 +187,7 @@ void setup()
   xTaskCreatePinnedToCore(TaskTimeGrafica, "TaskTimeGrafica", 1024 * 12, NULL, 1, &timeGraficaTaskHandle, 1);
   // Crear una tarea verifique el boton d15 si se requiere una restauracion de fabrica o restart
   TaskHandle_t taskRestoreTaskHandle;
-  xTaskCreatePinnedToCore(TaskRestore, "TaskRestore", 1024 * 8, NULL, 1, &taskRestoreTaskHandle, 1);
+  xTaskCreatePinnedToCore(TaskRestore, "TaskRestore", 1024 * 8, NULL, 1, &taskRestoreTaskHandle, 1); // no creo que sea esta
   // WebSocket envio de mensajes
   TaskHandle_t wsTaskHandle;
   xTaskCreatePinnedToCore(TaskWsSend, "TaskWsSend", 1024 * 8, NULL, 1, &wsTaskHandle, 0); // 0 el core donde estara trabajando
