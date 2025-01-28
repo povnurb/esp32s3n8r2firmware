@@ -27,7 +27,7 @@ usaremos los GPIO 08(SDA) y 09(SCL) para el display OLED
 #define ADC_VREF_mV 3300.0 // in millivolt podria utilizar un ajuste con un potenciometro
 #define ADC_RESOLUTION 4096.0
 #define LM35 1   //  sensor de temperatura de 0°C a 150°C
-#define DHTPIN 2 // GPIO 12 entrada sensor dht22 (temperatura y humedad)
+#define DHTPIN 2 // GPIO 2 entrada sensor dht22 (temperatura y humedad)
 // pines------------------------------------------
 #define BTNMENU 45          // TODO:boton que dara acceso a mostrar mas informacion
 #define BUZZER 21           // GPIO 21 ZUMBADOR

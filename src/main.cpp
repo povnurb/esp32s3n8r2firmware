@@ -46,7 +46,7 @@
 #include "reset.hpp"
 #include "telegram.hpp"
 #include "whatsapp.hpp"
-#include "sensorbme280"
+#include "sensorbme280.hpp"
 
 void setup()
 {
