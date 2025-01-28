@@ -321,9 +321,9 @@ float Temperatura()
         myLog("ERROR", "functions.hpp", "Temperatura()", "valor de temperatura inválido, conservamos el último valor");
         tempC = dht.readTemperature();
     }*/
-    tempCMasAjuste = tempC + ajTmpDht22;
+    tempCMasAjuste = tempC + ajTmpDht22; // tambien para la grafica
     float min = tempCMasAjuste;
-    ;
+
     if (min <= 1)
     {
         min2 == min2;
@@ -397,14 +397,8 @@ float Humedad()
     float hum2c = dht.readHumidity();
     float humedad2 = isnan(hum2c) ? humedad : hum2c; // tenia float por lo tanto no se guardaba globalmente
 
-    if (humedad2 < 0 || humedad2 == NAN)
-    {
-        return humedad;
-    }
-    else
-    {
-        humedad = humedad2;
-    }
+    humedad = humedad2;
+
     Serial.println("Se retorna HumedadDHt22");
     return humedad;
 }
@@ -846,7 +840,7 @@ void mostrarValoresTemp()
 
 bool pruebaTc()
 {
-    int nuevaTemperatura = tempCMasAjuste * 10;
+    int nuevaTemperatura = device_tempDHT.toFloat() * 10;
     // Serial.println(tempC);
     if (1 < nuevaTemperatura < 999)
     {
@@ -872,7 +866,7 @@ void ejecutarTc()
 {
     if (pruebaTc())
     {
-        int nuevaTemperatura = tempCMasAjuste;
+        int nuevaTemperatura = device_tempDHT.toFloat();
         Serial.print(nuevaTemperatura);
         myLog("Error", "functions.hpp", "ejecutarTc()", "Error con la medición de la temperatura");
     }
@@ -892,9 +886,9 @@ void mostrarValoresHum()
 
 bool pruebaHum()
 {
-    if (10 < humedad < 99)
+    if (10 < device_humedadDHT.toFloat() < 99)
     {
-        int nuevaHum = humedad * 10;
+        int nuevaHum = device_humedadDHT.toFloat() * 10;
         // Almacenar la nueva temperatura en el array y actualizar el índice
         vHum[0] = nuevaHum;
         // mostrarValoresHum();
@@ -914,7 +908,7 @@ void ejecutarHum()
 
     if (pruebaHum())
     {
-        Serial.println(humedad);
+        Serial.println(device_humedadDHT);
         myLog("Error", "functions.hpp", "ejecutarHum()", "Error con la medición de la humedad");
     }
 }
@@ -1193,7 +1187,7 @@ void actRele()
     {
         togle2 = !togle2;
         digitalWrite(RELAY2, true);
-        digitalWrite(TMOSFET2, true); // TODO: check
+        // digitalWrite(TMOSFET2, true); // TODO: check
         Serial.println("activar relay2 ");
 
         RELAY2_STATUS = true;
@@ -1202,7 +1196,7 @@ void actRele()
     {
         togle2 = !togle2;
         digitalWrite(RELAY2, false);
-        digitalWrite(TMOSFET2, false); // TODO:
+        // digitalWrite(TMOSFET2, false); // TODO:
         Serial.println("desactivar relay2 ");
 
         RELAY2_STATUS = false;
@@ -1690,25 +1684,25 @@ void mostrar()
         OLED.println(String(ap_ssid));
         OLED.println(ipToStr(WiFi.softAPIP())); // ipStr(WiFi.softAPIP())
         OLED.println(getDateTime());
-        if (tempCMasAjuste < 2)
+        if (device_tempDHT.toFloat() < 2)
         {
             OLED.print("WAIT");
         }
         else
         {
-            OLED.print(tempCMasAjuste);
+            OLED.print(device_tempDHT);
         }
         OLED.print(" C   ");
-        if (humedad < 2) // FIXME:debe ser float
+        if (device_humedadDHT.toFloat() < 2) // FIXME:debe ser float
         {
             OLED.print("WAIT");
         }
         else
         {
-            OLED.print(humedad); // FIXME:debe ser float
+            OLED.print(device_humedadDHT); // FIXME:debe ser float
         }
         OLED.println(" %");
-
+        OLED.println("demo.iotmx.com");
         OLED.display();
         // myLog("INFO", "functions.hpp", "mostrar", "MODO PUNTO DE ACCESO");
         Serial.flush();
@@ -1724,22 +1718,22 @@ void mostrar()
         OLED.println(ipToStr(WiFi.localIP()));
         // tal vez mostrar si hay alarma presente
         OLED.println(getDateTime());
-        if (tempCMasAjuste < 2)
+        if (device_tempDHT.toFloat() < 2)
         {
             OLED.print("WAIT");
         }
         else
         {
-            OLED.print(tempCMasAjuste);
+            OLED.print(device_tempDHT);
         }
         OLED.print(" C   ");
-        if (humedad < 2) // FIXME:debe ser float
+        if (device_humedadDHT.toFloat() < 2) // FIXME:debe ser float
         {
             OLED.print("WAIT");
         }
         else
         {
-            OLED.print(humedad); // FIXME:debe ser float
+            OLED.print(device_humedadDHT); // FIXME:debe ser float
         }
         OLED.println(" %");
         OLED.println("demo.iotmx.com");

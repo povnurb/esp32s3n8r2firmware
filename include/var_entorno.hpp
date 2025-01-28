@@ -2,10 +2,10 @@
 //  Accseso al dispositivo para el topico
 
 String gerencia;
-String ciudad;                    // de 6 digitos minuscula en settingsreset()
-String central;                   // de 6 digitos minuscula
-String sala;                      // de 7 digitos minuscula
-String DeviceName = "hgo-ptti-2"; // es el mdns que se le desa poner
+String ciudad;                     // de 6 digitos minuscula en settingsreset()
+String central;                    // de 6 digitos minuscula
+String sala;                       // de 7 digitos minuscula
+String DeviceName = "dulce-hogar"; // es el mdns que se le desa poner
 String Administrador = "admin";
 String Contra = "personal"; // tanto para modo AP
 // Acceso WiFi
@@ -26,8 +26,8 @@ String DnsSecondary = "10.106.10.2";
 boolean MqttAcceso = true;
 String MqttServer = "140.84.188.157"; // iotmx.com pero se puede perder el dominio
 int MqttPort = 1883;
-String MqttUser = "Uninet2";    // asignar
-String MqttPassword = "telmex"; // public
+String MqttUser = "asignar";    // asignar
+String MqttPassword = "public"; // public
 
 // si dese desea cambiar el topico es en la funcion PathMqttTopic() en el archivo functions.hpp
 

@@ -19,6 +19,7 @@
 
 /*Librerias agregadas para nuevas funcionalidades y obligatorias (LALO)*/
 #include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>    //libreria para el sensor bme280
 #include <DHT.h>                // para la temperatura y humedad by Adafruit
 #include <Adafruit_I2CDevice.h> //Para la comunicaciones serial by Adafruit
 #include <Adafruit_GFX.h>       // para la pantalla de lcd de gráficos (cuadrados circulos toda una especializacion)
@@ -45,6 +46,7 @@
 #include "reset.hpp"
 #include "telegram.hpp"
 #include "whatsapp.hpp"
+#include "sensorbme280"
 
 void setup()
 {
@@ -76,7 +78,7 @@ void setup()
   EEPROM.commit(); // guardamos la información
   EEPROM.end();
   String message = "Cantidad de reinicios: " + String(device_restart);
-  dht.begin(); // su funcionalidad se encuentra en functions.hpp
+
   myLog("INFO", "main.cpp", "EEPROM", message.c_str());
   // leer las configuraciones del settings.json
   if (!settingsRead())
@@ -146,6 +148,19 @@ void setup()
     myLog("INFO", "main.cpp", "OLED.begin()", "OLED OK");
     OLED.clearDisplay();
   }
+  if (!bme.begin(BME280_ADDRESS))
+  {
+    Serial.println("No se pudo encontrar un sensor BME280 válido, compruebe la conexión.");
+    Serial.println("inicializando con dht.");
+    dht.begin(); // su funcionalidad se encuentra en functions.hpp
+    sensorTempBME280 = false;
+  }
+  else
+  {
+    sensorTempBME280 = true;
+  }
+  // dht.begin(); // su funcionalidad se encuentra en functions.hpp
+
   // PWM
   ledcWrite(ledChannel, dim * 2.55); // 8 bits 255 dim es = 0-100 para el dimer
   // iniciar el setup del wiffi

@@ -7,6 +7,10 @@ algunos un no estan implementados
 LM35
 sensor de temperatura de 0°C a 150°C
 
+### PIN 2
+
+entrada de datos del sensor dht22 (temperatura y humedad)
+
 ### PIN 4
 
 entrada spi de datos (SDA) bus
@@ -29,23 +33,23 @@ del evaporador de respaldo
 
 ### PIN 10
 
-TMOSFET1 salidas quedan pendientes para despues ver que hacer
+CS (Chip Select): GPIO 10
 
 ### PIN 11
 
-salidas transistor mosfet numero 2
+MOSI (Master Out, Slave In): GPIO 11
 
 ### PIN 12
 
-entrada de datos del sensor dht22 (temperatura y humedad)
+SCK (Serial Clock): GPIO 12
 
 ### PIN 13
 
-SWITCH de prueba de las alarmas en local se activa con una tierra
+MISO (Master In, Slave Out): GPIO 13
 
 ### PIN 15
 
-boton que reseteara o restaurar el dispositivo
+boton de prueba de las alarmas en local se activa con una tierra
 
 ### PIN 16
 
@@ -118,4 +122,3 @@ boton de prueba del relay1
 ### LEDNEOPIXEL 48
 
 neopixel
-

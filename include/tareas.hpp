@@ -5,6 +5,8 @@ void resetIntLoop();
 void fechaRlay();
 void mostrar();
 void ctrlRelays();
+float humBme280();
+float tempbme280();
 
 // tarea de la reconexion del wifi
 void TaskWifiReconnect(void *pvParameters)
@@ -214,24 +216,41 @@ void TaskActualiza2seg(void *pvParameters)
         if (currentMillis - previousMillis >= interval)
         {
             previousMillis = currentMillis;
-
-            if (isTempNext)
+            if (!sensorTempBME280)
             {
-                device_tempDHT = String(Temperatura());
-                // Serial.print("Temperatura: ");
-                // Serial.println(device_tempDHT);
+                if (isTempNext)
+                {
+                    device_tempDHT = String(Temperatura());
+                    // Serial.print("Temperatura: ");
+                    // Serial.println(device_tempDHT);
+                }
+                else
+                {
+                    device_humedadDHT = String(Humedad());
+                    // Serial.print("Humedad: ");
+                    // Serial.println(device_humedadDHT);
+                }
             }
             else
             {
-                device_humedadDHT = String(Humedad());
-                // Serial.print("Humedad: ");
-                // Serial.println(device_humedadDHT);
+                if (isTempNext)
+                {
+                    device_tempDHT = String(tempbme280());
+                    // Serial.print("Temperatura: ");
+                    // Serial.println(device_tempDHT);
+                }
+                else
+                {
+                    device_humedadDHT = String(humBme280());
+                    // Serial.print("Humedad: ");
+                    // Serial.println(device_humedadDHT);
+                }
             }
 
             isTempNext = !isTempNext; // Alterna entre temperatura y humedad
         }
 
-        vTaskDelay(2/ portTICK_PERIOD_MS); // Pequeño retardo para evitar el "task starvation"
+        vTaskDelay(200 / portTICK_PERIOD_MS); // Pequeño retardo para evitar el "task starvation"
     }
 }
 

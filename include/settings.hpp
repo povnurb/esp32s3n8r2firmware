@@ -202,15 +202,15 @@ void settingsReset()
 {
     myLog("INFO", "settings.hpp", "settingsReset()", "Se procede a asignar valores de fabrica");
     telegram = true;
-    botToken = "7678398303:AAEZq0Y941WBAfQcDR0qEn5CNITJwyT4FSA"; // Reemplaza con tu token de bot
-    chatID = "7077248297";
+    botToken = ""; // 7678398303:AAEZq0Y941WBAfQcDR0qEn5CNITJwyT4FSA// Reemplaza con tu token de bot
+    chatID = "";   // 7077248297
     whatsapp = true;
-    MobileNumber = "5219211355959";
-    APIKey = "8124673";
-    gerencia = "coatza";
+    MobileNumber = "";     // 5219211355959
+    APIKey = "";           // 8124673
+    gerencia = "gerencia"; // coatza
     ciudad = "coatza";
     central = "coaigl";
-    sala = "uninet2";
+    sala = "sala";
     strlcpy(device_id, DeviceID().c_str(), sizeof(device_id));
     strlcpy(device_name, DeviceName.c_str(), sizeof(device_name));
     strlcpy(device_user, Administrador.c_str(), sizeof(device_user));

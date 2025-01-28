@@ -26,16 +26,17 @@ usaremos los GPIO 08(SDA) y 09(SCL) para el display OLED
 // https:// www.makerguides.com/interfacing-esp32-and-lm35-temperature-sensor/
 #define ADC_VREF_mV 3300.0 // in millivolt podria utilizar un ajuste con un potenciometro
 #define ADC_RESOLUTION 4096.0
-#define LM35 1 //  sensor de temperatura de 0°C a 150°C
+#define LM35 1   //  sensor de temperatura de 0°C a 150°C
+#define DHTPIN 2 // GPIO 12 entrada sensor dht22 (temperatura y humedad)
 // pines------------------------------------------
 #define BTNMENU 45          // TODO:boton que dara acceso a mostrar mas informacion
 #define BUZZER 21           // GPIO 21 ZUMBADOR
-#define TMOSFET1 10         // TODO: salidas quedan pendientes para despues ver que hacer
-#define TMOSFET2 11         // TODO: salidas
-#define DHTPIN 2           // GPIO 12 entrada sensor dht22 (temperatura y humedad)
-#define BTNRST 15           // boton que reseteara o restaurar el dispositivo
-#define BTN_ENABLE 16       // TODO:boton que habilita o desabilita alguna función
-#define SWITCHTESTALARM 13  // SWITCH de prueba de las alarmas en local se activa con una tierra
+#define CHIPSELECT 10       // TODO: salidas quedan pendientes para despues ver que hacer CS (Chip Select): GPIO 10
+#define MASTEROUTSLAVE 11   // TODO: salidas pendiente MOSI (Master Out, Slave In): GPIO 11
+#define SERIALCLOCK 12      // TODO: SCK (Serial Clock): GPIO 12
+#define MASTERIN 13         // TODO: MISO (Master In, Slave Out): GPIO 13
+#define SWITCHTESTALARM 15  // boton de prueba de las alarmas en local se activa con una tierra
+#define BTNRST 16           // boton de reset o restore
 #define RELAY1 17           // GPIO 17 Relevador1
 #define ACTRELE1 47         // boton de prueba del relay1
 #define LEDNEOPIXEL 48      // neopixel
@@ -346,6 +347,10 @@ String tipo;      // almacena el tipo de comentario
 // maneja los relay desde la api y verificara el estado por minuto
 // Funcion para operar los Relays de forma Global -> API
 //----------------------------------------------------------------------------
-// releTime estas variables son para indicar que no esta programado el y evitan que vuelvan a programarse
+// releTime estas variables son para indicar que no esta programado el relevador y evitan que vuelvan a programarse
 bool releprog1 = false;
 bool releprog2 = false;
+
+// variable que indica si esta el presente el sensor de temperatura BME280
+
+bool sensorTempBME280 = false; //
