@@ -65,7 +65,7 @@ String PathMqttTopic(const String &topic)
 }
 String Willmsg(const String name)
 {
-    return "{\"DeviceID\":\"" + name + "\", \"connected\":false}";
+    return String("{\"DeviceID\":\"" + name + "\", \"connected\":false}");
 }
 
 // se definen los dos pines de salida de los relays

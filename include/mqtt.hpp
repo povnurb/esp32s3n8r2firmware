@@ -89,7 +89,7 @@ boolean connectMqtt()
     mqttClient.setServer(mqtt_server, mqtt_port);
     mqttClient.setCallback(mqttCallback);
     myLog("INFO", "mqtt.hpp", "connectMqtt()", "Intentando conexión al broker MQTT ....");
-
+    Serial.println(mqtt_server);
     // topico para mensajes retenidos
     const char *willTopic = PathMqttTopic("status").c_str();
     if (mqttClient.connect(mqtt_id, mqtt_user, mqtt_password, willTopic, mqtt_willQos, mqtt_willRetain, mqtt_willMessage, mqtt_clean_session))
