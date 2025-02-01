@@ -785,8 +785,10 @@ bool apiPostMqtt(const String &data)
 {
     JsonDocument doc;
     DeserializationError error = deserializeJson(doc, data);
+    serializeJsonPretty(doc, Serial);
     if (error)
     {
+        myLog("ERROR", "apifunctions.hpp", "apiPostMqtt()", "problemas al deserializar la data");
         return false;
     }
     // validar el json

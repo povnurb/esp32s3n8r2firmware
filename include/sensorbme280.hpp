@@ -10,8 +10,8 @@ float tempbme280()
 
     // Leer la temperatura
     float temperature = bme.readTemperature() + ajTmpDht22;
-    Serial.print("Temperatura del BME280: ");
-    Serial.print(temperature);
+    // Serial.print("Temperatura del BME280: ");
+    // Serial.print(temperature);
     float min = temperature;
 
     if (min <= 1)
@@ -37,9 +37,9 @@ float humBme280()
 
     // Leer la humedad
     float humidity = bme.readHumidity();
-    Serial.print("Humedad del BME280: ");
-    Serial.print(humidity);
-    Serial.println(" %");
+    // Serial.print("Humedad del BME280: ");
+    // Serial.print(humidity);
+    // Serial.println(" %");
     return humidity;
 }
 
