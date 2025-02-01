@@ -148,7 +148,7 @@ void setup()
     myLog("INFO", "main.cpp", "OLED.begin()", "OLED OK");
     OLED.clearDisplay();
   }
-  if (!bme.begin(BME280_ADDRESS))
+  if (!setupBME280())
   {
     Serial.println("No se pudo encontrar un sensor BME280 válido, compruebe la conexión.");
     Serial.println("inicializando con dht.");

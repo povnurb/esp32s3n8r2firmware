@@ -787,62 +787,49 @@ bool apiPostMqtt(const String &data)
     DeserializationError error = deserializeJson(doc, data);
     Serial.println("la data de apipostMqtt:");
     serializeJsonPretty(doc, Serial);
+
     if (error)
     {
         myLog("ERROR", "apifunctions.hpp", "apiPostMqtt()", "problemas al deserializar la data");
-        // return false;
+        return false;
     }
-    // validar el json
+
     if (!validationMqttParam(doc))
     {
         myLog("ERROR", "apifunctions.hpp", "validationMqttParam()", "ERROR EN LA VALIDACION");
         return false;
     }
-    // si paso los filtros anteriores empezamo a validar el MQTT para guardar la informacion
-    if (doc["mqtt_commandTopic_gerencia"] && doc["mqtt_commandTopic_gerencia"].as<String>().length() > 0)
+
+    auto updateMqttTopics = [&](const String &field, String &topicVariable)
     {
-        gerencia = doc["mqtt_commandTopic_gerencia"].as<String>();
-        // como se modifico hayq que actualizar
-        // Serial.println("Se guarda el commandTopic");
-        strlcpy(mqtt_commandTopic, PathMqttTopic("command").c_str(), sizeof(mqtt_commandTopic));
-        // Serial.println(PathMqttTopic("command").c_str());
-        // Serial.println(mqtt_commandTopic);
-        strlcpy(mqtt_sendTopic, PathMqttTopic("device").c_str(), sizeof(mqtt_sendTopic));
-        strlcpy(mqtt_willTopic, PathMqttTopic("status").c_str(), sizeof(mqtt_willTopic));
-    }
-    if (doc["mqtt_commandTopic_ciudad"] && doc["mqtt_commandTopic_ciudad"].as<String>().length() > 0)
-    {
-        ciudad = doc["mqtt_commandTopic_ciudad"].as<String>();
-        // como se modifico hayq que actualizar
-        strlcpy(mqtt_commandTopic, PathMqttTopic("command").c_str(), sizeof(mqtt_commandTopic));
-        strlcpy(mqtt_sendTopic, PathMqttTopic("device").c_str(), sizeof(mqtt_sendTopic));
-        strlcpy(mqtt_willTopic, PathMqttTopic("status").c_str(), sizeof(mqtt_willTopic));
-    }
-    if (doc["mqtt_commandTopic_central"] && doc["mqtt_commandTopic_central"].as<String>().length() > 0)
-    {
-        central = doc["mqtt_commandTopic_central"].as<String>();
-        strlcpy(mqtt_commandTopic, PathMqttTopic("command").c_str(), sizeof(mqtt_commandTopic));
-        strlcpy(mqtt_sendTopic, PathMqttTopic("device").c_str(), sizeof(mqtt_sendTopic));
-        strlcpy(mqtt_willTopic, PathMqttTopic("status").c_str(), sizeof(mqtt_willTopic));
-    }
-    if (doc["mqtt_commandTopic_sala"] && doc["mqtt_commandTopic_sala"].as<String>().length() > 0)
-    {
-        sala = doc["mqtt_commandTopic_sala"].as<String>();
-        strlcpy(mqtt_commandTopic, PathMqttTopic("command").c_str(), sizeof(mqtt_commandTopic));
-        strlcpy(mqtt_sendTopic, PathMqttTopic("device").c_str(), sizeof(mqtt_sendTopic));
-        strlcpy(mqtt_willTopic, PathMqttTopic("status").c_str(), sizeof(mqtt_willTopic));
-    }
+        if (doc[field] && doc[field].as<String>().length() > 0)
+        {
+            topicVariable = doc[field].as<String>();
+            strlcpy(mqtt_commandTopic, PathMqttTopic("command").c_str(), sizeof(mqtt_commandTopic));
+            strlcpy(mqtt_sendTopic, PathMqttTopic("device").c_str(), sizeof(mqtt_sendTopic));
+            strlcpy(mqtt_willTopic, PathMqttTopic("status").c_str(), sizeof(mqtt_willTopic));
+        }
+    };
+
+    updateMqttTopics("mqtt_commandTopic_gerencia", gerencia);
+    updateMqttTopics("mqtt_commandTopic_ciudad", ciudad);
+    updateMqttTopics("mqtt_commandTopic_central", central);
+    updateMqttTopics("mqtt_commandTopic_sala", sala);
+
     mqtt_enabled = doc["mqtt_enabled"].as<bool>();
+
     if (doc["mqtt_server"] && doc["mqtt_server"].as<String>().length() > 0)
     {
         strlcpy(mqtt_server, doc["mqtt_server"].as<String>().c_str(), sizeof(mqtt_server));
     }
-    if (doc["mqtt_port"]) // ya que no deberia llegar vacio
+
+    if (doc["mqtt_port"])
     {
         mqtt_port = doc["mqtt_port"].as<int>();
     }
+
     mqtt_retain = doc["mqtt_retain"].as<bool>();
-    mqtt_qos = doc["mqtt_qos"].as<int>(); // cero o uno
+    mqtt_qos = doc["mqtt_qos"].as<int>();
 
     if (doc["mqtt_id"] && doc["mqtt_id"].as<String>().length() > 0)
     {
@@ -853,37 +840,30 @@ bool apiPostMqtt(const String &data)
     {
         strlcpy(mqtt_user, doc["mqtt_user"].as<String>().c_str(), sizeof(mqtt_user));
     }
+
     if (doc["mqtt_password"] && doc["mqtt_password"].as<String>().length() > 0)
     {
         strlcpy(mqtt_password, doc["mqtt_password"].as<String>().c_str(), sizeof(mqtt_password));
     }
+
     mqtt_clean_session = doc["mqtt_clean_session"].as<bool>();
-    // se quitan debido a que la aplicacion no debe volver a guardar los valores modificando el resultado
-    /*if (doc["mqtt_commandTopic"] && doc["mqtt_commandTopic"].as<String>().length() > 0)
-    {
-        strlcpy(mqtt_commandTopic, doc["mqtt_commandTopic"].as<String>().c_str(), sizeof(mqtt_commandTopic));
-    }
-    if (doc["mqtt_sendTopic"] && doc["mqtt_sendTopic"].as<String>().length() > 0)
-    {
-        strlcpy(mqtt_sendTopic, doc["mqtt_sendTopic"].as<String>().c_str(), sizeof(mqtt_sendTopic));
-    }*/
     mqtt_time_send = doc["mqtt_time_send"].as<bool>();
+
     if (doc["mqtt_time_interval"])
     {
-        mqtt_time_interval = doc["mqtt_time_interval"].as<int>() * 1000; // para que este en valores de millisegundos
+        mqtt_time_interval = doc["mqtt_time_interval"].as<int>() * 1000;
     }
+
     mqtt_status_send = doc["mqtt_status_send"].as<bool>();
-    /*if (doc["mqtt_willTopic"] && doc["mqtt_willTopic"].as<String>().length() > 0)
-    {
-        strlcpy(mqtt_willTopic, doc["mqtt_willTopic"].as<String>().c_str(), sizeof(mqtt_willTopic));
-    }*/
+
     if (doc["mqtt_willMessage"] && doc["mqtt_willMessage"].as<String>().length() > 0)
     {
         strlcpy(mqtt_willMessage, doc["mqtt_willMessage"].as<String>().c_str(), sizeof(mqtt_willMessage));
     }
+
     mqtt_willRetain = doc["mqtt_willRetain"].as<bool>();
     mqtt_willQos = doc["mqtt_willQos"].as<int>();
-    // guardar la informacion
+
     return settingsSave();
 }
 
