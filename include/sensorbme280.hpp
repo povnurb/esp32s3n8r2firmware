@@ -1,9 +1,9 @@
 // Definir la dirección del I2C
 
 // Definir la dirección solo si no está definida previamente
-#ifndef BME280_ADDRESS
+//#ifndef BME280_ADDRESS
 #define BME280_ADDRESS 0x76
-#endif
+//#endif
 Adafruit_BME280 bme;
 bool setupBME280() {
     
