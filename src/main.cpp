@@ -7,7 +7,8 @@
 #include <ArduinoJson.h>       // manejo de archivos JSON para las variables
 #include <TimeLib.h>           // para las fechas
 #include <RTClib.h>            // para el reloj en tiempo real
-#include <Wire.h>              // Necesaria para el reloj
+
+#include <Wire.h> // Necesaria para el reloj
 // Libreria para el RTC del ESP32
 #include <ESP32Time.h>         //ayuda a calcular la fecha
 #include <PubSubClient.h>      // para el MQTT
@@ -148,11 +149,12 @@ void setup()
     myLog("INFO", "main.cpp", "OLED.begin()", "OLED OK");
     OLED.clearDisplay();
   }
+  dht.begin(); // su funcionalidad se encuentra en functions.hpp
   if (!setupBME280())
   {
     Serial.println("No se pudo encontrar un sensor BME280 válido, compruebe la conexión.");
     Serial.println("inicializando con dht.");
-    dht.begin(); // su funcionalidad se encuentra en functions.hpp
+
     sensorTempBME280 = false;
   }
   else

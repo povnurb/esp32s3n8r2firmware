@@ -1,17 +1,19 @@
 // Definir la dirección del I2C
 
 // Definir la dirección solo si no está definida previamente
-//#ifndef BME280_ADDRESS
+// #ifndef BME280_ADDRESS
 #define BME280_ADDRESS 0x76
-//#endif
+// #endif
 Adafruit_BME280 bme;
-bool setupBME280() {
-    
-    if (!bme.begin(BME280_ADDRESS)) {
-        Serial.println("No se pudo encontrar un BME280 válido, revisa la conexión!");
+bool setupBME280()
+{
+
+    if (!bme.begin(BME280_ADDRESS))
+    {
+        myLog("INFO", "sensorbme280.hpp", "setupBME280", "No se pudo encontrar un BME280 válido, revisa la conexión!");
         return false;
     }
-    Serial.println("BME280 inicializado correctamente.");
+    myLog("INFO", "sensorbme280.hpp", "setupBME280", "BME280 Inicializado correctamente");
     return true;
 }
 

@@ -128,7 +128,7 @@ String JsonMsg()
     jsonDoc["ip"] = IpMqtt;                     // ip del dispositivo una sola vez cuando se conecta a la red WiFi
     //  crear el json con informacion que solo se ejecuta una sola vez
     jsonDoc["device_serial"] = deviceSerial;
-    jsonDoc["device_name"] = device_name;
+    jsonDoc["central"] = central;
     jsonDoc["sala"] = sala;
     jsonDoc["device_manufacture"] = deviceManofactura;
     jsonDoc["device_firmware"] = device_fw_version;

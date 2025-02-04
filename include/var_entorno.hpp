@@ -26,8 +26,8 @@ String DnsSecondary = "10.106.10.2";
 boolean MqttAcceso = true;
 String MqttServer = "140.84.188.157"; // iotmx.com pero se puede perder el dominio
 int MqttPort = 1883;
-String MqttUser = "asignar";    // asignar
-String MqttPassword = "public"; // public
+String MqttUser = "asignar";      // asignar
+String MqttPassword = "personal"; // public
 
 // si dese desea cambiar el topico es en la funcion PathMqttTopic() en el archivo functions.hpp
 
