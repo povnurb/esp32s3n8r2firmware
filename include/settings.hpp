@@ -201,10 +201,10 @@ boolean settingsRead()
 void settingsReset()
 {
     myLog("INFO", "settings.hpp", "settingsReset()", "Se procede a asignar valores de fabrica");
-    telegram = true;
+    telegram = false;
     botToken = ""; // 7678398303:AAEZq0Y941WBAfQcDR0qEn5CNITJwyT4FSA// Reemplaza con tu token de bot
     chatID = "";   // 7077248297
-    whatsapp = true;
+    whatsapp = false;
     MobileNumber = "";     // 5219211355959
     APIKey = "";           // 8124673
     gerencia = "gerencia"; // coatza
