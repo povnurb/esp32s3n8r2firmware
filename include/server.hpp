@@ -238,6 +238,7 @@ void initServer()
         {"/js/73.js", file_73_js, file_73_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/135.js", file_135_js, file_135_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/183.js", file_183_js, file_183_js_length, dataTypeJavaScripts, dataEncoding},
+        {"/js/230.js", file_230_js, file_230_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/261.js", file_261_js, file_261_js_length, dataTypeJavaScripts, dataEncoding},
         {"/js/289.js", file_289_js, file_289_js_length, dataTypeJavaScripts, dataEncoding},
         //{"/js/330.js", file_330_js, file_330_js_length, dataTypeJavaScripts, dataEncoding},
