@@ -306,6 +306,50 @@ DHT dht(DHTPIN, DHT22);
 // probando con esta funcion de IA
 float Temperatura()
 {
+    float temp2c = dht.readTemperature();
+
+    // Verificamos si la lectura es NaN, 0 o mayor a 45
+    if (!isnan(temp2c) && temp2c > 0)
+    {
+        tempC = (temp2c > 45) ? 45 : temp2c;
+    }
+    else
+    {
+        myLog("ERROR", "functions.hpp", "Temperatura()", "Lectura inválida (NaN o 0), se conserva el último valor.");
+    }
+
+    // Si tempC sigue siendo NaN o 0, asignamos un valor seguro (opcional)
+    if (isnan(tempC) || tempC == 0)
+    {
+        tempC = 25.0; // Se puede cambiar por un valor por defecto adecuado
+    }
+
+    // Ajustamos la temperatura para gráficos
+    tempCMasAjuste = tempC + ajTmpDht22;
+
+    // Calcular mínimos
+    if (tempCMasAjuste > 1)
+    {
+        if (tempCMasAjuste < min2 || isnan(min2))
+        {
+            min2 = tempCMasAjuste;
+        }
+    }
+
+    // Calcular máximos
+    if (tempCMasAjuste > max2 || isnan(max2))
+    {
+        max2 = tempCMasAjuste;
+    }
+
+    // Convertir solo si es necesario
+    device_tempMinima = String(min2);
+    device_tempMaxima = String(max2);
+
+    return tempCMasAjuste;
+}
+/*float Temperatura()
+{
     // isnan(dht.readTemperature())
     Serial.println("Se va hacer TemDHt22");
     // float tempC = dht.readTemperature();
@@ -316,11 +360,7 @@ float Temperatura()
     {
         myLog("ERROR", "functions.hpp", "Temperatura()", "error en la medicion del Dht22");
     }
-    /*else if (tempC <= 0)
-    {
-        myLog("ERROR", "functions.hpp", "Temperatura()", "valor de temperatura inválido, conservamos el último valor");
-        tempC = dht.readTemperature();
-    }*/
+
     tempCMasAjuste = tempC + ajTmpDht22; // tambien para la grafica
     float min = tempCMasAjuste;
 
@@ -342,7 +382,7 @@ float Temperatura()
     Serial.println("Se retorna valor TemDHt22");
     return (tempCMasAjuste); // un ajuste de calibracion segun el criterio
 }
-
+*/
 /*
 float Temperatura() // para la otra mandar un String
 {

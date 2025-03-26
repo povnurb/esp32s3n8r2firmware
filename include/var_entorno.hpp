@@ -2,10 +2,10 @@
 //  Accseso al dispositivo para el topico
 
 String gerencia;
-String ciudad;                     // de 6 digitos minuscula en settingsreset()
-String central;                    // de 6 digitos minuscula
-String sala;                       // de 7 digitos minuscula
-String DeviceName = "dulce-hogar"; // es el mdns que se le desa poner
+String ciudad;                   // de 6 digitos minuscula en settingsreset()
+String central;                  // de 6 digitos minuscula
+String sala;                     // de 7 digitos minuscula
+String DeviceName = "prototipo"; // es el mdns que se le desea poner
 String Administrador = "admin";
 String Contra = "personal"; // tanto para modo AP
 // Acceso WiFi
@@ -17,11 +17,11 @@ boolean WifiMode = true;             // true es igual modo estacion osea false e
 // boolean switchModeAP = true;        // ejemplo de sustitucion de un swithch que cambia el modo de manera manual false = AP
 //  la variable switchModeAp en true significa que no cambia a modo stacion por default en false
 boolean DHCP = true;
-String Ipv4 = "10.4.30.15";
-String SubRed = "255.255.255.0";
-String Gateway = "10.4.30.254";
-String DnsPrimary = "10.192.10.1";
-String DnsSecondary = "10.106.10.2";
+String Ipv4 = "";         //"10.4.30.15";
+String SubRed = "";       //"255.255.255.0";
+String Gateway = "";      //"10.4.30.254";
+String DnsPrimary = "";   //"10.192.10.1";
+String DnsSecondary = ""; //"10.106.10.2";
 // mqtt acceso
 boolean MqttAcceso = true;
 String MqttServer = "140.84.188.157"; // iotmx.com pero se puede perder el dominio

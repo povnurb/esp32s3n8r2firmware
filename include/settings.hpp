@@ -202,12 +202,12 @@ void settingsReset()
 {
     myLog("INFO", "settings.hpp", "settingsReset()", "Se procede a asignar valores de fabrica");
     telegram = false;
-    botToken = ""; // 7678398303:AAEZq0Y941WBAfQcDR0qEn5CNITJwyT4FSA// Reemplaza con tu token de bot
-    chatID = "";   // 7077248297
+    botToken = "7678398303"; // 7678398303:AAEZq0Y941WBAfQcDR0qEn5CNITJwyT4FSA// Reemplaza con tu token de bot
+    chatID = "7077248297";   // 7077248297
     whatsapp = false;
-    MobileNumber = "";     // 5219211355959
-    APIKey = "";           // 8124673
-    gerencia = "gerencia"; // coatza
+    MobileNumber = "5219211355959"; // 5219211355959
+    APIKey = "8124673";             // 8124673
+    gerencia = "gerencia";          // coatza
     ciudad = "coatza";
     central = "coaigl";
     sala = "sala";
@@ -266,28 +266,28 @@ void settingsReset()
     // ---------------------------------------------------------
     ALARM_LOGICA1 = true;
     ALARM_RECONOCIDA1 = true;
-    ALARM_NAME1 = "ALARMA IO35";
+    ALARM_NAME1 = "Falla rectificador P.B.";
     ALARM_LOGICA2 = true;
     ALARM_RECONOCIDA2 = true;
-    ALARM_NAME2 = "ALARMA IO36";
+    ALARM_NAME2 = "Descarga Baterias P.B.";
     ALARM_LOGICA3 = true;
     ALARM_RECONOCIDA3 = true;
-    ALARM_NAME3 = "ALARMA IO37";
+    ALARM_NAME3 = "Bajo Voltaje de Baterias P.B.";
     ALARM_LOGICA4 = true;
     ALARM_RECONOCIDA4 = true;
-    ALARM_NAME4 = "ALARMA IO38";
+    ALARM_NAME4 = "Grupo Electrogeno Bloqueado";
     ALARM_LOGICA5 = true;
     ALARM_RECONOCIDA5 = true;
-    ALARM_NAME5 = "ALARMA IO39";
+    ALARM_NAME5 = "Alta Temperatura PTTI";
     ALARM_LOGICA6 = true;
     ALARM_RECONOCIDA6 = true;
-    ALARM_NAME6 = "ALARMA IO40";
+    ALARM_NAME6 = "Falla Compresor Clima PTTI";
     ALARM_LOGICA7 = true;
     ALARM_RECONOCIDA7 = true;
-    ALARM_NAME7 = "ALARMA IO41";
+    ALARM_NAME7 = "Grupo Electrogeno Operando";
     ALARM_LOGICA8 = true;
     ALARM_RECONOCIDA8 = true;
-    ALARM_NAME8 = "ALARMA IO42";
+    ALARM_NAME8 = "Falla de red CFE";
     /********************************************************************************
      * variables para los actuadores RELAYS                                          *
      *******************************************************************************/
