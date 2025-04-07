@@ -259,8 +259,8 @@ void settingsReset()
     dim = 0;
     ajTmpDht22 = 0;
     ajTmpLm35 = 0;
-    ajTmpP1 = 0;
-    ajTmpP2 = 0;
+    ajTmpP1 = -2; // ajuste de temperatura del pozo 1 personalizado
+    ajTmpP2 = -4; // ajuste de temperatura del pozo 2 personalizado
     // ---------------------------------------------------------
     //  ZONA DE ALARMAS true = se activa el estatus con tierra y se pone en false
     // ---------------------------------------------------------

@@ -1200,12 +1200,12 @@ void setupPinBtnes()
 void actRele()
 {
     //-----------------------------------------------------------
-    if (!digitalRead(RELAY1) && !digitalRead(ACTRELE1) && togle1) //! digitalRead(RELAY1) verifica el estado del relay
+    if (!digitalRead(RELAY1) && !digitalRead(ACTRELE1) && togle1) // digitalRead(RELAY1) verifica el estado del relay
     {
         togle1 = !togle1;
         digitalWrite(RELAY1, true);
         // digitalWrite(TMOSFET1, true); // TODO: quitar
-        Serial.println("activar relay1 ");
+        // Serial.println("activar relay1 ");
         RELAY1_STATUS = true;
     }
     else if (digitalRead(RELAY1) && !digitalRead(ACTRELE1) && togle1) // digitalRead(RELAY1) verifica el estado del realy
@@ -1213,7 +1213,7 @@ void actRele()
         togle1 = !togle1;
         digitalWrite(RELAY1, false);
         // digitalWrite(TMOSFET1, false); // TODO: quitar
-        Serial.println("desactivar relay1 ");
+        // Serial.println("desactivar relay1 ");
 
         RELAY1_STATUS = false;
     }
@@ -1223,21 +1223,20 @@ void actRele()
         togle1 = true;
     }
     //-----------------------------------------------------------
-    if (!digitalRead(RELAY2) && !digitalRead(ACTRELE2) && togle2)
+    if (!digitalRead(RELAY2) && !digitalRead(ACTRELE2) && togle2) // se modifico por el hardware
     {
         togle2 = !togle2;
         digitalWrite(RELAY2, true);
         // digitalWrite(TMOSFET2, true); // TODO: check
-        Serial.println("activar relay2 ");
-
+        // Serial.println("activar relay2 ");
         RELAY2_STATUS = true;
     }
-    else if (digitalRead(RELAY2) && !digitalRead(ACTRELE2) && togle2)
+    else if (digitalRead(RELAY2) && !digitalRead(ACTRELE2) && togle2) // se modifico por el hardware
     {
         togle2 = !togle2;
         digitalWrite(RELAY2, false);
         // digitalWrite(TMOSFET2, false); // TODO:
-        Serial.println("desactivar relay2 ");
+        // Serial.println("desactivar relay2 ");
 
         RELAY2_STATUS = false;
     }
